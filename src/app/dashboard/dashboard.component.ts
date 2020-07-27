@@ -26,18 +26,18 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
 
-      this._mappingService.getLoggedIn('diagnosis')
-          .subscribe(
-              data => {
+    //   this._mappingService.getLoggedIn('diagnosis')
+    //       .subscribe(
+    //           data => {
 
-                  console.log(data.name)
+    //               console.log(data.name)
 
-                  if (data.name == null){
-                      this.router.navigate([`login/`])
-                  }
+    //               if (data.name == null){
+    //                   this.router.navigate([`login/`])
+    //               }
 
-              }
-          );
+    //           }
+    //       );
 
 
       let chartData = [{

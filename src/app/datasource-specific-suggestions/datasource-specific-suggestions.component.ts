@@ -1,7 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {MappingService} from "../mapping.service";
-import {enterView} from "@angular/core/src/render3/instructions";
 import {Mapping} from "../mapping-interface";
 
 @Component({

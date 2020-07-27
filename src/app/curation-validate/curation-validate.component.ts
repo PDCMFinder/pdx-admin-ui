@@ -97,23 +97,16 @@ export class CurationValidateComponent implements OnInit {
         reader.readAsText(event.srcElement.files[0]);
 
         reader.onload = () => {
-
-            const lines = reader.result.split('\n');
-
+            const lines = (<string>reader.result).split('\n');  
             lines.forEach((element, index) => {
-
                 const cols: string[] = element.replace(/['"]+/g, '').split(',');
-
                 if (index == 0) {
-
                     this.parsedCsvHead = cols;
                 } else {
                     this.parsedCsvBody.push(cols);
                 }
-                
             });
         }
-
         this.showCSV = true;
     }
 
