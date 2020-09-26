@@ -25,9 +25,7 @@ export class CurationManageComponent implements OnInit {
     private selectedRow;
     private selectedEntity: any;
     private report = null;
-
     private pageRange: number[];
-
     // Selected Fields
     private selectedDetails: any;
     private showNotif: boolean = false;
@@ -63,7 +61,6 @@ export class CurationManageComponent implements OnInit {
                 var size = params.get('size');
                 var status = params.get('status');
                 var source = params.get('source');
-
                 // If no page value submitted, set page value as first page
                 page = (page == null) ? "1" : page;
                 this.userPage = parseInt(page);
@@ -71,7 +68,6 @@ export class CurationManageComponent implements OnInit {
                 this.entityType = type;
                 this.mappingStatus = status;
                 this.dataSource = source;
-
                 // Set default values incase no value is specified
                 page = (page == null) ? "1" : page;
                 size = (size == null) ? "10" : size;
@@ -82,11 +78,9 @@ export class CurationManageComponent implements OnInit {
                 this.manageCuratedData(page, size, type, status, source);
             }
         )
-
-        // Load Fab Scripts
+        // Load Floating Action Button (FAB) Scripts
         this.gs.loadScript('../pdxfinder/dependencies/fab.js');
     };
-
 
     manageCuratedData(page, size, type, status, source) {
         let sourceFiter = (source === null) ? '' : `&mq=datasource:${source}`;
@@ -97,15 +91,12 @@ export class CurationManageComponent implements OnInit {
         this._mappingService.getManagedTerms(type, source, page, size, status)
             .subscribe(
                 data => {
-
                     this.data = data;
                     let mappings = this.data.mappings;
-
                     // Build Column Headers If data is not empty
                     if (mappings.length > 0) {
                         // Transfer mappingLabel for this entityType to the template
                         this.dataLabels = mappings[0].mappingLabels;
-
                         // Convert mapping Labels from CamelCase to Normal Case for Column Headers in Template
                         this.dataLabels.forEach((mappingLabel) => {
                             this.columnHeaders.push(mappingLabel.replace(/([a-z])([A-Z])/g, '$1 $2'));
@@ -125,11 +116,6 @@ export class CurationManageComponent implements OnInit {
             const blob = new Blob([data], {type: 'text/csv'});
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
-            // a.setAttribute('hidden', '');
-            // a.setAttribute('download', 'download.csv');
-            // document.body.appendChild(a);
-            // a.click();
-            // document.removeChild(a);
             a.href = url;
             a.download = "myFile.csv";
             a.click();
@@ -195,7 +181,7 @@ export class CurationManageComponent implements OnInit {
         })
     }
 
-    // whenever filter is apllied doit as size dro down, reset page to 1
+    // whenever filter is apllied, reset page to 1
     newPageSize(pageSize) {
         localStorage.setItem('_pageSize', pageSize);
         //  Auto-Navigate away on page size change
@@ -211,7 +197,6 @@ export class CurationManageComponent implements OnInit {
         this.entityType = (filter.type != "") ? filter.type : this.entityType;
         this.mappingStatus = (filter.status != "") ? filter.status : this.mappingStatus;
         this.dataSource = (filter.source != "") ? filter.source : this.dataSource;
-
         // Capture Selected Providers Check Box
         var sources = [];
         this.providersList2.forEach((provider)=>{
@@ -220,7 +205,6 @@ export class CurationManageComponent implements OnInit {
             }
         })
         this.dataSource = (sources.length != 0) ? sources.join() : this.dataSource;
-
         // Capture Selected Curation Status Check Box
         var status = [];
         this.statusList.forEach((dStatus)=>{
@@ -229,7 +213,6 @@ export class CurationManageComponent implements OnInit {
             }
         })
         this.mappingStatus = (status.length != 0) ? status.join() : this.mappingStatus;
-
         // Capture Data Type Status Check Box
         var types = [];
         this.dataTypes.forEach((dType)=>{
@@ -246,13 +229,9 @@ export class CurationManageComponent implements OnInit {
     }
 
     toggleDisplay(compType: string) {
-
         if (compType == 'notif') {
-
             this.showNotif = (this.showNotif == true) ? false : true;
-
         }else if (compType == 'filter'){
-
             this.showFilter = (this.showFilter == true) ? false : true;
         }
     }

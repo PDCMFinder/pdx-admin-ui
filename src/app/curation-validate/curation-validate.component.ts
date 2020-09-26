@@ -15,19 +15,14 @@ declare var swal: any;
     styles: [``]
 })
 export class CurationValidateComponent implements OnInit {
-
     private data;
     private mappings = [];
-
     private report = null;
-
     private dataTypes = [];
-
     private selectedFiles: FileList;
     private currentFileUpload: File;
     private uploadedFilename: string;
     errorReport: string;
-
     private parsedCsvHead = [];
     private parsedCsvBody = [];
     private showCSV = false;
@@ -39,42 +34,25 @@ export class CurationValidateComponent implements OnInit {
     }
 
     ngOnInit() {
-
         this.getDataTypes();
-
     };
 
-
     getDataTypes() {
-
         var entityTypes = ['diagnosis', 'treatment'];
-
         entityTypes.forEach((entity, index) => {
             this.dataTypes.push(
                 {id: index, text: entity, checked: false}
             )
         })
-
     }
 
-
     selectFile(event) {
-
         const userFile = event.target.files.item(0);
-
-
         if (userFile.type == 'text/csv') {
-
             this.displayUploadedCSV(event);
-
             this.selectedFiles = event.target.files;
-
             this.currentFileUpload = this.selectedFiles.item(0);
-
-            //console.log(this.currentFileUpload);
-
             this.uploadedFilename = this.currentFileUpload.name;
-
             this.report = 'waiting';
 
         } else {
@@ -85,17 +63,11 @@ export class CurationValidateComponent implements OnInit {
         }
     }
 
-
     displayUploadedCSV(event) {
-
-
         this.parsedCsvHead = [];
         this.parsedCsvBody = [];
-
         var reader = new FileReader();
-
         reader.readAsText(event.srcElement.files[0]);
-
         reader.onload = () => {
             const lines = (<string>reader.result).split('\n');  
             lines.forEach((element, index) => {
@@ -110,41 +82,24 @@ export class CurationValidateComponent implements OnInit {
         this.showCSV = true;
     }
 
-
     upload() {
-
         this._mappingService.pushFileToStorage(this.currentFileUpload, 'diagnosis').subscribe(responseEntity => {
-
                 console.log('File is completely uploaded!');
                 console.log(responseEntity);
                 this.report = 'success';
 
             },
             failedResponse => {
-
                 this.report = 'failed';
                 this.errorReport = `${failedResponse.error}`;
-
                 console.log('File was not completely uploaded!');
                 console.log(failedResponse);
             }
         );
-
         this.selectedFiles = null;
-
     }
-
-
 
     toggleReport(success: string) {
         this.report = null;
     }
 }
-
-
-
-/*
-
-
-
- */

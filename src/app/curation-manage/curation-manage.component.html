@@ -75,7 +75,6 @@
                                     <a class="collapse-link"> <i class="ti-angle-double-up"></i> </a>
                                 </div>
                             </div>
-
                             <div class="pdxfinder-content no-padding">
                                 <ul class="list-group">
 
@@ -94,9 +93,7 @@
                 </div>
             </div>
 
-
             <div [ngClass]="showFilter == true ? 'col-lg-9' : 'col-lg-12'"
-
                  *ngIf="dataExists" [style.width]="showFilter == true ? '79.1666666667%' : null">
 
                 <form #mappingForm="ngForm" *ngIf="!submitted" novalidate>
@@ -143,7 +140,6 @@
 
                                     <tr class="pdxfinder-clickable-rows2" *ngFor="let mapping of mappings; index as i"
                                         [class.active]="mapping.entityId == selectedRow">
-
                                         <td> {{mapping.entityId}} </td>
                                         <td *ngFor="let dataLabel of dataLabels ">
 
@@ -151,20 +147,11 @@
                                                   class="clipText overflow-ellipsis"> {{ mapping.mappingValues[dataLabel] | uppercase }} </span>
                                             <span *ngIf="dataLabel != 'DataSource'"
                                                   class="clipText overflow-ellipsis"> {{ mapping.mappingValues[dataLabel] | titlecase }} </span>
-
                                         </td>
 
-                                        <td>
-                                            <span class="clipText overflow-ellipsis"> {{ mapping.mappedTermLabel | titlecase }} </span>
-                                        </td>
-
-                                        <td>
-                                            <span class="clipText overflow-ellipsis"> {{ mapping.mapType | titlecase }} </span>
-                                        </td>
-
-                                        <td>
-                                            <span class="clipText overflow-ellipsis"> {{ mapping.justification | titlecase }} </span>
-                                        </td>
+                                        <td><span class="clipText overflow-ellipsis"> {{ mapping.mappedTermLabel | titlecase }} </span></td>
+                                        <td><span class="clipText overflow-ellipsis"> {{ mapping.mapType | titlecase }} </span></td>
+                                        <td> <span class="clipText overflow-ellipsis"> {{ mapping.justification | titlecase }} </span></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -173,21 +160,15 @@
 
                                     <li [ngClass]="{'disabled': data.page == 1 }">
                                         <span *ngIf="data.page == 1"> First << </span>
-
                                         <a *ngIf="data.page != 1"
                                            [routerLink]="['/curation/manage']"
                                            [queryParams]="{page: 1, size: pageSize, type: entityType, status : mappingStatus, source: dataSource}">
                                             First << </a>
-
                                     </li>
-
                                     <li *ngFor="let count of pageRange " [ngClass]="{'active': data.page == count }">
-
                                         <a [routerLink]="['/curation/manage']"
                                            [queryParams]="{page: count, size: pageSize, type: entityType, status : mappingStatus, source: dataSource}"> {{count }} </a>
                                     </li>
-
-
                                     <li [ngClass]="{'disabled': data.page == data.totaPages }">
                                         <span *ngIf="data.page == data.totaPages"> Last >> </span>
                                         <a *ngIf="data.page != data.totaPages"
@@ -197,14 +178,10 @@
                                             >> </a>
 
                                     </li>
-
-
                                 </ul>
-
 
                                 <div style="display: inline; width: 70px; margin-left: 5px; margin-top: -10px; float: right">
                                     <select class="form-control" (change)="newPageSize($event.target.value)">
-
                                         <option *ngFor="let pageOption of pageOptions"
                                                 [value]="pageOption"
                                                 [selected]="pageOption == pageOptionSize">

@@ -16,8 +16,6 @@ declare function pdxFinderbarChart(title: String,
   styles: [``]
 })
 export class DashboardComponent implements OnInit {
-
-
     private loggedIn;
 
   constructor(private _mappingService: MappingService,
@@ -25,21 +23,6 @@ export class DashboardComponent implements OnInit {
               private gs: GeneralService) { }
 
   ngOnInit() {
-
-    //   this._mappingService.getLoggedIn('diagnosis')
-    //       .subscribe(
-    //           data => {
-
-    //               console.log(data.name)
-
-    //               if (data.name == null){
-    //                   this.router.navigate([`login/`])
-    //               }
-
-    //           }
-    //       );
-
-
       let chartData = [{
           "mapping": "JAX",
           "visits": 3
@@ -63,16 +46,6 @@ export class DashboardComponent implements OnInit {
           "visits": 0
       }]
 
-
-      //this.gs.loadScript('../pdxfinder/dependencies/chart/amcharts.js');
-      //this.gs.loadScript('../pdxfinder/dependencies/chart/serial.js');
-      //this.gs.loadScript('../pdxfinder/dependencies/chart/export.min.js');
-      //this.gs.loadScript('../pdxfinder/dependencies/chart/light.js');
-      //this.gs.loadScript('../pdxfinder/dependencies/chart/3dbar.js');
-
-     // pdxFinderbarChart("Missing Mapping",chartData,"chartdiv", "mapping", "visits", 15);
-
   }
-
 
 }
