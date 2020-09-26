@@ -1,5 +1,4 @@
 <div class="row wrapper border-bottom white-bg page-heading">
-
     <div class="col-lg-8">
         <h2> Manage Orphaned Data </h2>
         <ol class="breadcrumb">
@@ -9,7 +8,6 @@
         </ol>
     </div>
 </div>
-
 <div *ngIf="showNotif" class="top-notif col-lg-3 animated fadeInRight">
     <h3> {{selectedSrc}} {{selectedEntityType | titlecase}}<span (click)="toggleNotification(false)" class='close'></span></h3>
     <p> {{selectedDetails}}  </p>
@@ -53,7 +51,6 @@
                     </form>
                 </div>
             </div>
-
             <div [ngClass]="showFilter == true ? 'col-lg-12' : 'col-lg-12'">
                 <form #mappingForm="ngForm" *ngIf="!submitted" (ngSubmit)="updateMappingEntity()" novalidate>
                     <div class="pdxfinder float-e-margins">
@@ -124,7 +121,6 @@
                                     </tr>
                                     </tbody>
                                 </table>
-
                                 <ul class="pagination pagination-sm" style="margin-top:-3px; margin-bottom:0px;">
                                     <li [ngClass]="{'disabled': data.page == 1 }">
                                         <span *ngIf="data.page == 1"> First << </span>
@@ -141,10 +137,8 @@
                                            [routerLink]="['/curation/orphan/'+data.totaPages]"> Last >> </a>
                                     </li>
                                 </ul>
-
                                 <div style="display: inline; width: 70px; margin-left: 5px; margin-top: -10px; float: right">
                                     <select class="form-control" (change)="newPageSize($event.target.value)">
-
                                         <option *ngFor="let pageOption of pageOptions"
                                                 [value]="pageOption"
                                                 [selected]="pageOption == pageOptionSize">

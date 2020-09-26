@@ -12,8 +12,6 @@ export class TopNavBarComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-
-
   }
 
   toggleSystemFont(action){

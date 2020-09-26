@@ -5,7 +5,6 @@ import {Mapping, MappingInterface, MappingValues} from "../mapping-interface";
 import {GeneralService} from "../general.service";
 import {FormBuilder, FormGroup} from "@angular/forms";
 
-
 declare var swal: any;
 
 @Component({
@@ -109,8 +108,6 @@ export class CurationManageComponent implements OnInit {
             );
     }
 
-
-
     exportCSV(){
         const download = function (data) {
             const blob = new Blob([data], {type: 'text/csv'});
@@ -136,7 +133,7 @@ export class CurationManageComponent implements OnInit {
             }
             return csvRows.join('\n');
         }
-
+        
         const data = this.mappings.map(row =>({
             dateCreated: row.dateCreated,
             entityId: row.entityId,
@@ -235,6 +232,4 @@ export class CurationManageComponent implements OnInit {
             this.showFilter = (this.showFilter == true) ? false : true;
         }
     }
-
-
 }
