@@ -23,13 +23,10 @@ export class GeneralService {
     }
 
     public getNumbersInRange(startIndex: number, endIndex: number){
-
         var items: number[] = [];
-
         for(var i = startIndex; i <= endIndex; i++){
             items.push(i);
         }
-
         return items;
     }
 }
