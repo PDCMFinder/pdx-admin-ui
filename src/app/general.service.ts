@@ -9,7 +9,7 @@ export class GeneralService {
 
 
     public loadScript(url: string) {
-        const body = <HTMLDivElement> document.body;
+        const body = document.body as HTMLDivElement;
         const script = document.createElement('script');
         script.innerHTML = '';
         script.src = url;
@@ -22,9 +22,9 @@ export class GeneralService {
         return dString.charAt(0).toUpperCase() + dString.slice(1);
     }
 
-    public getNumbersInRange(startIndex: number, endIndex: number){
-        var items: number[] = [];
-        for(var i = startIndex; i <= endIndex; i++){
+    public getNumbersInRange(startIndex: number, endIndex: number) {
+        const items: number[] = [];
+        for (let i = startIndex; i <= endIndex; i++) {
             items.push(i);
         }
         return items;

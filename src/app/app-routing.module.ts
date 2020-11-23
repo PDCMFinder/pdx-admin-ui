@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { CurationMappingComponent } from "./curation-mapping/curation-mapping.component";
-import { DatasourceSummaryComponent } from "./datasource-summary/datasource-summary.component";
-import { DashboardComponent } from "./dashboard/dashboard.component";
-import { DatasourceSpecificComponent } from "./datasource-specific/datasource-specific.component";
-import { DatasourceSpecificSuggestionsComponent } from "./datasource-specific-suggestions/datasource-specific-suggestions.component";
-import { CurationManageComponent } from "./curation-manage/curation-manage.component";
-import { CurationOrphanComponent } from "./curation-orphan/curation-orphan.component";
-import { CurationArchiveComponent } from "./curation-archive/curation-archive.component";
-import { CurationValidateComponent } from "./curation-validate/curation-validate.component";
-import { LoginComponent } from "./login/login.component";
+import { CurationMappingComponent } from './curation-mapping/curation-mapping.component';
+import { DatasourceSummaryComponent } from './datasource-summary/datasource-summary.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { DatasourceSpecificComponent } from './datasource-specific/datasource-specific.component';
+import { DatasourceSpecificSuggestionsComponent } from './datasource-specific-suggestions/datasource-specific-suggestions.component';
+import { CurationManageComponent } from './curation-manage/curation-manage.component';
+import { CurationOrphanComponent } from './curation-orphan/curation-orphan.component';
+import { CurationArchiveComponent } from './curation-archive/curation-archive.component';
+import { CurationValidateComponent } from './curation-validate/curation-validate.component';
+import { LoginComponent } from './login/login.component';
 
 
 const routes: Routes = [
-    //{ path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+    // { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
     { path: '', component: DashboardComponent },
     { path: 'dashboard', component: DashboardComponent },
     { path: 'login', component: LoginComponent },
@@ -45,4 +45,4 @@ export class AppRoutingModule {
 
 export const routingComponents = [DashboardComponent,
     CurationMappingComponent,
-    DatasourceSummaryComponent, DatasourceSpecificComponent]
+    DatasourceSummaryComponent, DatasourceSpecificComponent];

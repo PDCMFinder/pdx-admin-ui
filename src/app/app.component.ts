@@ -1,18 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { MappingService } from "./mapping.service";
-import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-pdxFinder',
+  selector: 'app-pdx-finder',
   templateUrl: './app.component.html',
   styles: [``]
 })
 export class AppComponent implements OnInit {
 
-  private isFullPage: boolean;
+  isFullPage: boolean;
 
-  constructor(private router: Router,
-    private route: ActivatedRoute) { }
+  constructor(private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
 
@@ -26,6 +24,5 @@ export class AppComponent implements OnInit {
     });
 
   }
-
 
 }
