@@ -14,12 +14,12 @@ export class TopNavBarComponent implements OnInit {
   ngOnInit() {
   }
 
-  toggleSystemFont(action){
-    if (action == 'plus') {
+  toggleSystemFont(action) {
+    if (action === 'plus') {
       this.setFont += 1;
-    }else if (action == 'minus') {
+    } else if (action === 'minus') {
       this.setFont -= 1;
-    }else {
+    } else {
       this.setFont = 13;
     }
     document.body.style.fontSize = `${this.setFont}px`;

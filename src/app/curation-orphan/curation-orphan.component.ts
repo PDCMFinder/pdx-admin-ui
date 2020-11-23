@@ -1,11 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {MappingService} from "../mapping.service";
-import {Mapping, MappingInterface, MappingValues} from "../mapping-interface";
-import {GeneralService} from "../general.service";
-import {FormBuilder, FormGroup} from "@angular/forms";
-
-import { saveAs } from 'file-saver';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MappingService } from '../mapping.service';
+import { Mapping } from '../mapping-interface';
+import { GeneralService } from '../general.service';
 
 declare var swal: any;
 
@@ -16,43 +13,46 @@ declare var swal: any;
 })
 export class CurationOrphanComponent implements OnInit {
 
-    private data;
-    private mappings = [];
+    data;
+    mappings = [];
 
-    private dataSource;
-    private entityType;
+    dataSource;
+    entityType;
 
-    private dataExists = false;
-    private dataLabels;
-    private columnHeaders = [];
+    dataExists = false;
+    dataLabels;
+    columnHeaders = [];
 
-    private selectedRow;
-    private selectedEntity: any;
-    private report = null;
-    private pageRange: number[];
+    selectedRow;
+    selectedEntity: any;
+    report = null;
+    pageRange: number[];
 
     // Selected Fields
-    private selectedDetails: any;
-    private selectedEntityId: any;
-    private selectedEntityType: string;
-    private selectedSrc: any;
+    selectedDetails: any;
+    selectedEntityId: any;
+    selectedEntityType: string;
+    selectedSrc: any;
 
-    private showNotif: boolean = false;
-    private showFilter: boolean = false;
+    showNotif = false;
+    showFilter = false;
 
-    private pageSize;
-    private pageOptions = ['2', '3', '5', '10', '15', '20', '25'];
-    private userPage: number;
+    pageSize;
+    pageOptions = ['2', '3', '5', '10', '15', '20', '25'];
+    userPage: number;
 
-    private mappingStatus: any;
-    private pageOptionSize: string;
+    mappingStatus: any;
+    pageOptionSize: string;
 
-    private dataTypes = [];
+    dataTypes = [];
 
-    constructor(private router: Router,
-                private route: ActivatedRoute,
-                private _mappingService: MappingService,
-                private gs: GeneralService) {
+    submitted;
+
+    constructor(
+        private router: Router,
+        private route: ActivatedRoute,
+        private mappingService: MappingService,
+        private gs: GeneralService) {
     }
 
     ngOnInit() {
@@ -60,55 +60,55 @@ export class CurationOrphanComponent implements OnInit {
         // From the current url snapshot, get the source parameter and assign to the dataSource property
         this.route.paramMap.subscribe(
             params => {
-                var page = params.get('page');
-                var type = localStorage.getItem('_entityType');
-                var size = localStorage.getItem('_pageSize');
-                var status = 'orphaned';
-                var source = null;
+                let page = params.get('page');
+                let type = localStorage.getItem('_entityType');
+                let size = localStorage.getItem('_pageSize');
+                const status = 'orphaned';
+                const source = null;
                 this.pageSize = size;
                 this.mappingStatus = status;
                 this.dataSource = source;
-                this.userPage = (page == null) ? 0 : parseInt(page);
+                this.userPage = (page == null) ? 0 : Number(page);
                 // If no page value submitted, set page value as §first page
-                page = (page == null) ? "1" : page;
-                size = (size == null) ? "5" : size;
-                type = (type == null) ? "diagnosis" : type;
+                page = (page == null) ? '1' : page;
+                size = (size == null) ? '5' : size;
+                type = (type == null) ? 'diagnosis' : type;
                 this.pageOptionSize = size;
                 this.entityType = type;
                 this.manageOrphanedData(page, size, type, status, source);
             }
-        )
+        );
         // Return Selected Data from DatasourceSpecificSuggestionsComponent Child Component this parent component
-        this._mappingService.dataSubject.subscribe(
+        this.mappingService.dataSubject.subscribe(
             data => {
-                for (var i = 0; i < this.mappings.length; i++) {
-                    if (this.mappings[i].entityId == this.selectedEntityId) {
-                        this.mappings[i].mappedTermLabel = data.mappedTermLabel.toUpperCase();
-                        this.mappings[i].mapType = data.mapType.toUpperCase();
-                        this.mappings[i].justification = data.justification.toUpperCase();
-                        this.mappings[i].mappedTermUrl = data.mappedTermUrl;
+                for (const mapping of this.mappings) {
+                    if (mapping.entityId === this.selectedEntityId) {
+                        mapping.mappedTermLabel = data.mappedTermLabel.toUpperCase();
+                        mapping.mapType = data.mapType.toUpperCase();
+                        mapping.justification = data.justification.toUpperCase();
+                        mapping.mappedTermUrl = data.mappedTermUrl;
                     }
                 }
             }
-        )
+        );
         // Get String Data from Child Component : Allows parent data Row to auto-selected when deeplinked suggestion url is visited
-        this._mappingService.stringDataBusSubject.subscribe(
+        this.mappingService.stringDataBusSubject.subscribe(
             data => this.getClickedRow(data)
-        )
+        );
         // Load Fab Scripts
         this.gs.loadScript('../pdxfinder/dependencies/fab.js');
-    };
+    }
 
     manageOrphanedData(page, size, type, status, source) {
         this.columnHeaders = [];
         this.mappings = [];
-        this._mappingService.getManagedTerms(type, source, page, size, status)
+        this.mappingService.getManagedTerms(type, source, page, size, status)
             .subscribe(
                 data => {
                     this.data = data;
                     console.log(this.data.totaPages);
                     // This receives the mappings node of the json in required format
-                    let mappings = this.data.mappings;
+                    const mappings = this.data.mappings;
                     // Build Column Headers If data is not empty
                     if (mappings.length > 0) {
                         // Transfer mappingLabel for this entityType to the template
@@ -125,11 +125,11 @@ export class CurationOrphanComponent implements OnInit {
             );
     }
 
-    getDataTypes(){
-        var entityTypes =  ['diagnosis', 'treatment'];
+    getDataTypes() {
+        const entityTypes = ['diagnosis', 'treatment'];
         entityTypes.forEach((entity, index) => {
-            this.dataTypes.push({id: index, text: entity, checked: false})
-        })
+            this.dataTypes.push({ id: index, text: entity, checked: false });
+        });
 
     }
 
@@ -137,38 +137,38 @@ export class CurationOrphanComponent implements OnInit {
     newPageSize(pageSize) {
         localStorage.setItem('_pageSize', pageSize);
         //  Auto-Navigate away on page size change
-        let newPage = (this.userPage <= 1) ? this.userPage + 1 : 1;
-        this.router.navigate([`curation/orphan/${newPage}`])
+        const newPage = (this.userPage <= 1) ? this.userPage + 1 : 1;
+        this.router.navigate([`curation/orphan/${newPage}`]);
     }
 
     searchFilter(form) {
-        var filter = form.value;
-        this.entityType = (filter.type != "") ? filter.type : this.entityType;
-        this.mappingStatus = (filter.status != "") ? filter.status : this.mappingStatus;
-        this.dataSource = (filter.source != "") ? filter.source : this.dataSource;
+        const filter = form.value;
+        this.entityType = (filter.type !== '') ? filter.type : this.entityType;
+        this.mappingStatus = (filter.status !== '') ? filter.status : this.mappingStatus;
+        this.dataSource = (filter.source !== '') ? filter.source : this.dataSource;
         // Capture Data Type Status Check Box
-        var types = [];
-        this.dataTypes.forEach((dType)=>{
-            if (dType.checked == true) {
+        const types = [];
+        this.dataTypes.forEach((dType) => {
+            if (dType.checked === true) {
                 types.push(dType.text);
             }
-        })
-        this.entityType = (types.length != 0) ? types.join() : this.entityType;
+        });
+        this.entityType = (types.length !== 0) ? types.join() : this.entityType;
         localStorage.setItem('_entityType', this.entityType);
         this.refreshPage();
     }
 
     refreshPage() {
         //  Auto-Navigate away on page size change
-        let newPage = (this.userPage == 0) ? "1" : "";
-        this.router.navigate([`curation/orphan/${newPage}`])
+        const newPage = (this.userPage === 0) ? '1' : '';
+        this.router.navigate([`curation/orphan/${newPage}`]);
     }
 
     toggleDisplay(compType: string) {
-        if (compType == 'notif') {
-            this.showNotif = (this.showNotif == true) ? false : true;
-        }else if (compType == 'filter'){
-            this.showFilter = (this.showFilter == true) ? false : true;
+        if (compType === 'notif') {
+            this.showNotif = (this.showNotif === true) ? false : true;
+        } else if (compType === 'filter') {
+            this.showFilter = (this.showFilter === true) ? false : true;
         }
     }
 
@@ -179,8 +179,10 @@ export class CurationOrphanComponent implements OnInit {
         this.selectedEntity = mapping;
         this.selectedEntityId = mapping.entityId;
         this.selectedRow = mapping.entityId;
-        this.selectedDetails = (mapping.entityType == 'diagnosis') ?
+        /* tslint:disable:no-string-literal */
+        this.selectedDetails = (mapping.entityType === 'diagnosis') ?
             mapping.mappingValues.SampleDiagnosis : mapping.mappingValues['TreatmentName'];
+        /* tslint:enable:no-string-literal */
         this.selectedSrc = mapping.mappingValues.DataSource;
         this.selectedEntityType = mapping.entityType;
         this.toggleNotification(true);
@@ -192,58 +194,60 @@ export class CurationOrphanComponent implements OnInit {
 
     toggleReport(value: string) {
         this.report = null;
-        if (value == 'success') {
+        if (value === 'success') {
             setTimeout(() => {
-                this.refreshPage()
-            }, 1000)
+                this.refreshPage();
+            }, 1000);
         }
     }
 
     updateMappingEntity() {
-        var validatedTerms = [];
+        const validatedTerms = [];
         this.mappings.forEach((mapping) => {
             mapping.suggestedMappings = [];
-            mapping.status = "created";
-            if (mapping['mappedTermLabel'] != '-' && mapping['mappedTermUrl'] != null) {
+            mapping.status = 'created';
+            /* tslint:disable:no-string-literal */
+            if (mapping['mappedTermLabel'] !== '-' && mapping['mappedTermUrl'] != null) {
                 validatedTerms.push(mapping);
             }
+            /* tslint:enable:no-string-literal */
         });
         this.sendDataForUpdate(validatedTerms);
     }
 
     // swalAlert (Beautiful replacement for Javascfript pop up) prompting user for final execution
-    sendDataForUpdate(validatedTerms){
+    sendDataForUpdate(validatedTerms) {
         swal({
-                title: "Are you sure?",
-                text: "You may not be able to reverse this operation",
-                imageUrl: 'assets/icons/question.jpg',
-                showCancelButton: true,
-                confirmButtonColor: '#03369D',
-                confirmButtonText: 'YES',
-                cancelButtonText: "NO",
-                closeOnConfirm: false,
-                closeOnCancel: false
-            },
+            title: 'Are you sure?',
+            text: 'You may not be able to reverse this operation',
+            imageUrl: 'assets/icons/question.jpg',
+            showCancelButton: true,
+            confirmButtonColor: '#03369D',
+            confirmButtonText: 'YES',
+            cancelButtonText: 'NO',
+            closeOnConfirm: false,
+            closeOnCancel: false
+        },
             (isConfirm) => {
                 if (isConfirm) {
-                    this._mappingService.updateEntity(validatedTerms)
+                    this.mappingService.updateEntity(validatedTerms)
                         .subscribe(
                             response => {
-                                this.report = "success";
+                                this.report = 'success';
                                 this.showNotif = false;
-                                swal("Submitted!", "Your curation has been submitted", "success");
+                                swal('Submitted!', 'Your curation has been submitted', 'success');
                             },
                             error => {
 
-                                this.report = "failed";
-                                swal("Failed", " The curation is invalid :)", "error");
-                                //console.log(error.ok, error)
+                                this.report = 'failed';
+                                swal('Failed', ' The curation is invalid :)', 'error');
+                                // console.log(error.ok, error)
                             }
                         );
                 } else {
-                    swal("Cancelled", "The request was cancelled :)", "error");
+                    swal('Cancelled', 'The request was cancelled :)', 'error');
                 }
-            })
+            });
 
     }
 }

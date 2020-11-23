@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import {MappingService} from "../mapping.service";
-import {GeneralService} from "../general.service";
-import {ActivatedRoute, Route, Router} from "@angular/router";
+import {MappingService} from '../mapping.service';
+import {GeneralService} from '../general.service';
+import {ActivatedRoute, Route, Router} from '@angular/router';
 
-declare function pdxFinderbarChart(title: String,
+declare function pdxFinderbarChart(title: string,
                                    data: any,
-                                   cssID: String,
-                                   categoryField: String,
-                                   valueField: String,
+                                   cssID: string,
+                                   categoryField: string,
+                                   valueField: string,
                                    labelRotation: number): any;
 
 @Component({
@@ -18,33 +18,33 @@ declare function pdxFinderbarChart(title: String,
 export class DashboardComponent implements OnInit {
     private loggedIn;
 
-  constructor(private _mappingService: MappingService,
+  constructor(private mappingService: MappingService,
               private router: Router,
               private gs: GeneralService) { }
 
   ngOnInit() {
-      let chartData = [{
-          "mapping": "JAX",
-          "visits": 3
+      const chartData = [{
+          mapping: 'JAX',
+          visits: 3
       }, {
-          "mapping": "IRCC",
-          "visits": 7
+          mapping: 'IRCC',
+          visits: 7
       }, {
-          "mapping": "PDMR",
-          "visits": 5
+          mapping: 'PDMR',
+          visits: 5
       }, {
-          "mapping": "PDXNET-HCI-BCM",
-          "visits": 0
+          mapping: 'PDXNET-HCI-BCM',
+          visits: 0
       }, {
-          "mapping": "PDXNET-MDANDERSON",
-          "visits": 2
+          mapping: 'PDXNET-MDANDERSON',
+          visits: 2
       }, {
-          "mapping": "PDXNET-MDANDERSON-PENN ",
-          "visits": 0
+          mapping: 'PDXNET-MDANDERSON-PENN ',
+          visits: 0
       }, {
-          "mapping": "PDXNET-WUSTL",
-          "visits": 0
-      }]
+          mapping: 'PDXNET-WUSTL',
+          visits: 0
+      }];
 
   }
 

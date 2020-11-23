@@ -1,22 +1,22 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpRequest, HttpEvent, HttpHeaders} from "@angular/common/http";
-import {Mapping, MappingInterface} from "./mapping-interface";
-import {Observable, Subject, throwError} from "rxjs/index";
-import {catchError} from "rxjs/internal/operators";
-import {SummaryInterface} from "./summary-interface";
+import {HttpClient, HttpErrorResponse, HttpRequest, HttpEvent, HttpHeaders} from '@angular/common/http';
+import {Mapping, MappingInterface} from './mapping-interface';
+import {Observable, Subject, throwError} from 'rxjs/index';
+import {catchError} from 'rxjs/internal/operators';
+import {SummaryInterface} from './summary-interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MappingService {
 
-    private devServer = "http://ves-ebi-bc.ebi.ac.uk:8081";
-    private serverUrl = "http://localhost:8081"; // this.devServer; //
+    private devServer = 'http://ves-ebi-bc.ebi.ac.uk:8081';
+    private serverUrl = 'http://localhost:8081'; // this.devServer; //
 
-    private _summaryUrl = this.serverUrl+"/api/mappings/summary";
-    private _mappingsUrl = this.serverUrl+"/api/mappings";
-    public _exportUrl = this.serverUrl+"/api/mappings/export";
-    private _uploadURL = this.serverUrl+"/api/mappings/uploads";
+    private summaryUrl = this.serverUrl + '/api/mappings/summary';
+    private mappingsUrl = this.serverUrl + '/api/mappings';
+    public exportUrl = this.serverUrl + '/api/mappings/export';
+    private uploadURL = this.serverUrl + '/api/mappings/uploads';
 
     public dataSubject = new Subject<any>();
     public stringDataBusSubject = new Subject<any>();
@@ -25,61 +25,61 @@ export class MappingService {
 
     constructor(private http: HttpClient) { }
 
-    getCurationSummary(maptype: string): Observable<SummaryInterface[]>{
-        var curationType = (maptype == null) ? '' : `?entity-type=${maptype}`;
-        const url = `${this._summaryUrl}${curationType}`;
+    getCurationSummary(maptype: string): Observable<SummaryInterface[]> {
+        const curationType = (maptype == null) ? '' : `?entity-type=${maptype}`;
+        const url = `${this.summaryUrl}${curationType}`;
         return this.http.get<SummaryInterface[]>(url);
     }
 
-    getTerms(status: string, entityType: string, dataSource: string, page: string, size: string): Observable<MappingInterface[]>{
-        const url = `${this._mappingsUrl}?mq=datasource:${dataSource}&entity-type=${entityType}&status=${status}&page=${page}&size=${size}`;
+    getTerms(status: string, entityType: string, dataSource: string, page: string, size: string): Observable<MappingInterface[]> {
+        const url = `${this.mappingsUrl}?mq=datasource:${dataSource}&entity-type=${entityType}&status=${status}&page=${page}&size=${size}`;
         return this.http.get<MappingInterface[]>(url);
     }
 
-    getUnmappedTermsByType(entityType: string): Observable<MappingInterface[]>{
-        const url = `${this._mappingsUrl}?entity-type=${entityType}&status=unmapped`;
+    getUnmappedTermsByType(entityType: string): Observable<MappingInterface[]> {
+        const url = `${this.mappingsUrl}?entity-type=${entityType}&status=unmapped`;
         return this.http.get<MappingInterface[]>(url);
     }
 
 
-    getTermsByStatus(status: string): Observable<MappingInterface[]>{
-        const url = `${this._mappingsUrl}?status=${status}`;
+    getTermsByStatus(status: string): Observable<MappingInterface[]> {
+        const url = `${this.mappingsUrl}?status=${status}`;
         return this.http.get<MappingInterface[]>(url);
     }
 
-    getManagedTerms(entityType: string, dataSource: string, page: string, size: string, status: string): Observable<MappingInterface[]>{
-        var dsQuery = "";
-        if (dataSource != null){
+    getManagedTerms(entityType: string, dataSource: string, page: string, size: string, status: string): Observable<MappingInterface[]> {
+        let dsQuery = '';
+        if (dataSource != null) {
             dsQuery = `&mq=datasource:${dataSource}`;
         }
-        const url = `${this._mappingsUrl}?entity-type=${entityType}&page=${page}&size=${size}&status=${status}${dsQuery}`;
+        const url = `${this.mappingsUrl}?entity-type=${entityType}&page=${page}&size=${size}&status=${status}${dsQuery}`;
         return this.http.get<MappingInterface[]>(url);
     }
 
-    getMappingEntityById(entityId: string): Observable<Mapping>{
-        let url = `${this._mappingsUrl}/${entityId}`;
+    getMappingEntityById(entityId: string): Observable<Mapping> {
+        const url = `${this.mappingsUrl}/${entityId}`;
         return this.http.get<Mapping>(url);
     }
 
-    getOLS(entityId: string): Observable<any>{
-        let url = `${this._mappingsUrl}/ontologies?type=${entityId}`;
+    getOLS(entityId: string): Observable<any> {
+        const url = `${this.mappingsUrl}/ontologies?type=${entityId}`;
         return this.http.get<any>(url);
     }
 
-    componentsDataBus(data): void{
+    componentsDataBus(data): void {
         this.dataSubject.next(data);
     }
 
-    stringDataBus(data): void{
+    stringDataBus(data): void {
         this.stringDataBusSubject.next(data);
     }
 
-    eventDataBus(data): void{
+    eventDataBus(data): void {
         this.eventDataSubject.next(data);
     }
 
-    updateEntity (mappings) {
-        return this.http.put<any>(this._mappingsUrl, mappings)
+    updateEntity(mappings) {
+        return this.http.put<any>(this.mappingsUrl, mappings)
             .pipe(catchError(this.errorHandler));
     }
 
@@ -103,7 +103,7 @@ export class MappingService {
     pushFileToStorage(file: File, entityType: string): Observable<HttpEvent<{}>> {
         const formdata: FormData = new FormData();
         formdata.append('uploads', file);
-        const url = `${this._uploadURL}?entity-type=${entityType}`;
+        const url = `${this.uploadURL}?entity-type=${entityType}`;
         return this.http.post<any>(url, formdata)
             .pipe(
                 catchError(this.errorHandler)
