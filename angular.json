@@ -25,6 +25,7 @@
               "src/pdxfinder"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css",
               "src/pdxfinder/pattern-library/bootstrap.min.css",
               "src/pdxfinder/pattern-library/datatables.min.css",
@@ -115,6 +116,7 @@
               "src/pdxfinder"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css",
               "src/pdxfinder/pattern-library/bootstrap.min.css",
               "src/pdxfinder/pattern-library/datatables.min.css",
@@ -170,6 +172,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "pdx-admin-ui"
 }

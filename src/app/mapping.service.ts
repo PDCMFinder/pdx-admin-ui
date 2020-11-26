@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpRequest, HttpEvent, HttpHeaders} from '@angular/common/http';
-import {Mapping, MappingInterface} from './mapping-interface';
-import {Observable, Subject, throwError} from 'rxjs/index';
-import {catchError} from 'rxjs/internal/operators';
-import {SummaryInterface} from './summary-interface';
+import { HttpClient, HttpErrorResponse, HttpEvent } from '@angular/common/http';
+import { Mapping, MappingInterface } from './mapping-interface';
+import { Observable, Subject, throwError } from 'rxjs/index';
+import { catchError } from 'rxjs/internal/operators';
+import { SummaryInterface } from './summary-interface';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class MappingService {
 
@@ -15,6 +15,7 @@ export class MappingService {
 
     private summaryUrl = this.serverUrl + '/api/mappings/summary';
     private mappingsUrl = this.serverUrl + '/api/mappings';
+    private missingMappingsUrl = this.serverUrl + '/api/getmissingdiagnosismappings';
     public exportUrl = this.serverUrl + '/api/mappings/export';
     private uploadURL = this.serverUrl + '/api/mappings/uploads';
 
@@ -115,6 +116,10 @@ export class MappingService {
             .then((res) => res.json())
             .then((data) => data)
             .catch(error => console.log(error));
+    }
+
+    getMissingMappings() {
+        return this.http.get<Mapping[]>(this.missingMappingsUrl);
     }
 
 }
