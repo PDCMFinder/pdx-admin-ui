@@ -65,8 +65,7 @@ export class DatasourceSummaryComponent implements OnInit {
     }
 
     getMappingsByType(newMappings: Mapping[]) {
-        //Intentional error (== instead ===)
-        return newMappings.filter(x => this.mapType.toUpperCase() == x.entityType.toUpperCase());
+        return newMappings.filter(x => this.mapType.toUpperCase() === x.entityType.toUpperCase());
     }
 
     closeNotificationAndReloadPage() {
