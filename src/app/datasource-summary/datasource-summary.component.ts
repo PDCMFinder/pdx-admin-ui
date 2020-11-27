@@ -5,14 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GeneralService } from '../general.service';
 import { Mapping } from '../mapping-interface';
 
-declare function pdxFinderbarChart(
-    title: string,
-    data: any,
-    cssID: string,
-    categoryField: string,
-    valueField: string,
-    labelRotation: number): any;
-
 @Component({
     selector: 'app-datasource-summary',
     templateUrl: './datasource-summary.component.html',
@@ -73,12 +65,11 @@ export class DatasourceSummaryComponent implements OnInit {
     }
 
     getMappingsByType(newMappings: Mapping[]) {
-        return newMappings.filter(x => this.mapType.toUpperCase() === x.entityType.toUpperCase());
+        return newMappings.filter(x => this.mapType.toUpperCase() == x.entityType.toUpperCase());
     }
 
     closeNotificationAndReloadPage() {
         this.notificationVisible = false;
-
     }
 
 }
