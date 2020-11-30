@@ -58,18 +58,23 @@ export class DatasourceSpecificComponent implements OnInit {
         // From the current url snapshot, get the source parameter and assign to the dataSource property
         this.dataSource = this.route.snapshot.paramMap.get('source');
         this.entityTypeUrl = this.route.snapshot.paramMap.get('mapType');
-        this.entityType = this.entityTypeUrl.split('-')[0];
+        if (this.entityTypeUrl) {
+            this.entityType = this.entityTypeUrl.split('-')[0];
+        }
         let page = this.route.snapshot.paramMap.get('page');
         const size = localStorage.getItem('_pageSize');
 
         this.route.paramMap.subscribe(
             params => {
-                this.mappingStatusToGet = params.get('page').split('-')[0];
-                page = params.get('page').split('-')[1];
-                // If no page value submitted, set page value as first page
-                page = (page == null) ? '1' : page;
-                this.userPage = Number(page);
-                this.getUnmappedTerms(page);
+                const pageParameter = params.get('page');
+                if (pageParameter) {
+                    this.mappingStatusToGet = pageParameter.split('-')[0];
+                    page = pageParameter.split('-')[1];
+                    // If no page value submitted, set page value as first page
+                    page = (page == null) ? '1' : page;
+                    this.userPage = Number(page);
+                    this.getUnmappedTerms(page);
+                }
             }
         );
         // Get Data from Child Component
@@ -98,7 +103,10 @@ export class DatasourceSpecificComponent implements OnInit {
                 }
             }
         );
-        this.getOLSTerms(this.entityType.toLowerCase());
+        if (this.entityType) {
+            this.getOLSTerms(this.entityType.toLowerCase());
+        }
+
     }
 
     getOLSTerms(entityType) {

@@ -1,4 +1,7 @@
+import { HttpClientModule } from '@angular/common/http';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { CurationOrphanComponent } from './curation-orphan.component';
 
@@ -8,7 +11,12 @@ describe('CurationOrphanComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CurationOrphanComponent ]
+      declarations: [ CurationOrphanComponent ],
+      imports: [
+        FormsModule,
+        RouterTestingModule,
+        HttpClientModule
+      ]
     })
     .compileComponents();
   }));

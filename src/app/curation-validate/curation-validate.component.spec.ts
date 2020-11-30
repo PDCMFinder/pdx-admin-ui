@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CurationValidateComponent } from './curation-validate.component';
@@ -8,7 +9,10 @@ describe('CurationValidateComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CurationValidateComponent ]
+      declarations: [ CurationValidateComponent ],
+      imports: [
+        HttpClientModule
+      ]
     })
     .compileComponents();
   }));

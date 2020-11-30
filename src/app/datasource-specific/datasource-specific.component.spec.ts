@@ -1,4 +1,7 @@
+import { HttpClientModule } from '@angular/common/http';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { DatasourceSpecificComponent } from './datasource-specific.component';
 
@@ -8,7 +11,12 @@ describe('DatasourceSpecificComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DatasourceSpecificComponent ]
+      declarations: [ DatasourceSpecificComponent ],
+      imports: [
+        RouterTestingModule,
+        FormsModule,
+        HttpClientModule
+      ]
     })
     .compileComponents();
   }));

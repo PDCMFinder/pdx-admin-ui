@@ -20,7 +20,7 @@ export interface Mapping {
     dateUpdated?: any;
 }
 
-export interface MappingInterface {
+export class MappingInterface {
 
     mappings: Mapping[];
 

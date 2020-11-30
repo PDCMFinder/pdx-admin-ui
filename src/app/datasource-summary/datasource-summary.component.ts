@@ -5,14 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GeneralService } from '../general.service';
 import { Mapping } from '../mapping-interface';
 
-declare function pdxFinderbarChart(
-    title: string,
-    data: any,
-    cssID: string,
-    categoryField: string,
-    valueField: string,
-    labelRotation: number): any;
-
 @Component({
     selector: 'app-datasource-summary',
     templateUrl: './datasource-summary.component.html',
@@ -34,9 +26,12 @@ export class DatasourceSummaryComponent implements OnInit {
 
     ngOnInit() {
         // From the current url snapshot, get the source parameter and ...
-        const urlParam = this.route.snapshot.paramMap.get('mapType').split('-')[0];
-        this.mapType = this.gs.capitalize(urlParam);
-        this.reloadPage();
+        const mapType = this.route.snapshot.paramMap.get('mapType');
+        if (mapType) {
+            const urlParam = mapType.split('-')[0];
+            this.mapType = this.gs.capitalize(urlParam);
+            this.reloadPage();
+        }
     }
 
     reloadPage() {

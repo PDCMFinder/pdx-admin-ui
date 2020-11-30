@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MappingService } from '../mapping.service';
-import { Mapping } from '../mapping-interface';
+import { Mapping, MappingInterface } from '../mapping-interface';
 import { GeneralService } from '../general.service';
 
 declare var swal: any;
@@ -13,7 +13,7 @@ declare var swal: any;
 })
 export class CurationOrphanComponent implements OnInit {
 
-    data;
+    data: MappingInterface = new MappingInterface();
     mappings = [];
 
     dataSource;

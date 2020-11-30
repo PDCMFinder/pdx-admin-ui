@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "test-headless": "ng test --watch=false --browsers=ChromeHeadless",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -12,7 +13,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "~8.2.14",
-    "@angular/cdk": "~8.1.4",
+    "@angular/cdk": "^8.2.3",
     "@angular/common": "~8.2.14",
     "@angular/compiler": "~8.2.14",
     "@angular/core": "~8.2.14",

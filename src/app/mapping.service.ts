@@ -48,13 +48,14 @@ export class MappingService {
         return this.http.get<MappingInterface[]>(url);
     }
 
-    getManagedTerms(entityType: string, dataSource: string, page: string, size: string, status: string): Observable<MappingInterface[]> {
+    getManagedTerms(entityType: string, dataSource: string, page: string, size: string, status: string): Observable<MappingInterface> {
         let dsQuery = '';
         if (dataSource != null) {
             dsQuery = `&mq=datasource:${dataSource}`;
         }
         const url = `${this.mappingsUrl}?entity-type=${entityType}&page=${page}&size=${size}&status=${status}${dsQuery}`;
-        return this.http.get<MappingInterface[]>(url);
+
+        return this.http.get<MappingInterface>(url);
     }
 
     getMappingEntityById(entityId: string): Observable<Mapping> {

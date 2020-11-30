@@ -1,5 +1,5 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { MappingService } from '../mapping.service';
 import { Mapping } from '../mapping-interface';
 
@@ -25,7 +25,6 @@ export class DatasourceSpecificSuggestionsComponent implements OnInit {
     clickedDetails;
     olsUrl = 'https://www.ebi.ac.uk/ols/ontologies/ncit/terms?iri=';
     constructor(
-        private router: Router,
         private route: ActivatedRoute,
         private mappingService: MappingService) { }
 

@@ -1,4 +1,7 @@
+import { HttpClientModule } from '@angular/common/http';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { CurationManageComponent } from './curation-manage.component';
 
@@ -8,7 +11,12 @@ describe('CurationManageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CurationManageComponent ]
+      declarations: [ CurationManageComponent ],
+      imports: [
+        FormsModule,
+        RouterTestingModule,
+        HttpClientModule
+      ]
     })
     .compileComponents();
   }));
