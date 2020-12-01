@@ -79,7 +79,7 @@ export class CurationOrphanComponent implements OnInit {
             }
         );
         // Return Selected Data from DatasourceSpecificSuggestionsComponent Child Component this parent component
-        this.mappingService.dataSubject.subscribe(
+        this.mappingService.getDataSubject().subscribe(
             data => {
                 for (const mapping of this.mappings) {
                     if (mapping.entityId === this.selectedEntityId) {
@@ -92,7 +92,7 @@ export class CurationOrphanComponent implements OnInit {
             }
         );
         // Get String Data from Child Component : Allows parent data Row to auto-selected when deeplinked suggestion url is visited
-        this.mappingService.stringDataBusSubject.subscribe(
+        this.mappingService.getStringDataBusSubject().subscribe(
             data => this.getClickedRow(data)
         );
         // Load Fab Scripts
@@ -172,9 +172,6 @@ export class CurationOrphanComponent implements OnInit {
         }
     }
 
-
-
-
     getClickedRow(mapping: Mapping) {
         this.selectedEntity = mapping;
         this.selectedEntityId = mapping.entityId;
@@ -248,6 +245,5 @@ export class CurationOrphanComponent implements OnInit {
                     swal('Cancelled', 'The request was cancelled :)', 'error');
                 }
             });
-
     }
 }

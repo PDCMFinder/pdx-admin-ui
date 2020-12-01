@@ -78,7 +78,7 @@ export class DatasourceSpecificComponent implements OnInit {
             }
         );
         // Get Data from Child Component
-        this.mappingService.dataSubject.subscribe(
+        this.mappingService.getDataSubject().subscribe(
             data => {
                 for (const mapping of this.mappings) {
                     if (mapping.entityId === this.selectedEntityId) {
@@ -93,7 +93,7 @@ export class DatasourceSpecificComponent implements OnInit {
 
         // Get String Data from Child Component :
         // This data is sent to the parent on load, so it allows parent data Row to be selected when deeplink url is visited
-        this.mappingService.stringDataBusSubject.subscribe(
+        this.mappingService.getStringDataBusSubject().subscribe(
             data => this.getClickedRow(data)
         );
         this.mappingService.eventDataSubject.subscribe(
