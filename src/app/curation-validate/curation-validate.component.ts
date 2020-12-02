@@ -1,10 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { MappingService } from '../mapping.service';
-import { GeneralService } from '../general.service';
-
-declare var swal: any;
-
 
 @Component({
     selector: 'app-curation-validate',
@@ -24,11 +19,7 @@ export class CurationValidateComponent implements OnInit {
     parsedCsvBody = [];
     showCSV = false;
 
-    constructor(
-        private router: Router,
-        private route: ActivatedRoute,
-        private mappingService: MappingService,
-        private gs: GeneralService) {
+    constructor(private mappingService: MappingService) {
     }
 
     ngOnInit() {

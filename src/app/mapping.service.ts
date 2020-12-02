@@ -19,12 +19,20 @@ export class MappingService {
     public exportUrl = this.serverUrl + '/api/mappings/export';
     private uploadURL = this.serverUrl + '/api/mappings/uploads';
 
-    public dataSubject = new Subject<any>();
-    public stringDataBusSubject = new Subject<any>();
+    private dataSubject = new Subject<any>();
+    private stringDataBusSubject = new Subject<any>();
     public eventDataSubject = new Subject<any>();
     public errorReport = null;
 
     constructor(private http: HttpClient) { }
+
+    public getDataSubject() {
+        return this.dataSubject;
+    }
+
+    public getStringDataBusSubject() {
+        return this.stringDataBusSubject;
+    }
 
     getCurationSummary(maptype: string): Observable<SummaryInterface[]> {
         const curationType = (maptype == null) ? '' : `?entity-type=${maptype}`;
@@ -48,13 +56,14 @@ export class MappingService {
         return this.http.get<MappingInterface[]>(url);
     }
 
-    getManagedTerms(entityType: string, dataSource: string, page: string, size: string, status: string): Observable<MappingInterface[]> {
+    getManagedTerms(entityType: string, dataSource: string, page: string, size: string, status: string): Observable<MappingInterface> {
         let dsQuery = '';
         if (dataSource != null) {
             dsQuery = `&mq=datasource:${dataSource}`;
         }
         const url = `${this.mappingsUrl}?entity-type=${entityType}&page=${page}&size=${size}&status=${status}${dsQuery}`;
-        return this.http.get<MappingInterface[]>(url);
+
+        return this.http.get<MappingInterface>(url);
     }
 
     getMappingEntityById(entityId: string): Observable<Mapping> {
