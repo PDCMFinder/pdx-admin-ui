@@ -3674,7 +3674,7 @@ font-size: 13px;
     opacity: 0;
     -moz-transform: scale(5);
     -ms-transform: scale(5);
-    webkit-transform: scale(5);
+    -webkit-transform: scale(5);
     transform: scale(5);
   }
 }
