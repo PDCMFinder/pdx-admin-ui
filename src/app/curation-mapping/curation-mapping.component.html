@@ -14,7 +14,7 @@
       <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
         <div class="pdxfinder">
           <div class="pdxfinder-content pdx-badge" style="padding-bottom:10px;" [attr.pdxfinder-badge]="unmappedDiagnosisCnt == 0 ? null : unmappedDiagnosisCnt">
-            <img (click)="onClick('diagnosis-summary')" src="assets/icons/diagnosis.png" class="icon pdxfinder-clickable-area">
+            <img (click)="onClick('diagnosis-summary')" src="assets/icons/diagnosis.png" alt="Diagnosis Mapping" class="icon pdxfinder-clickable-area">
             <div class='text-navy pdx-singleLine'> DIAGNOSIS MAPPING </div>
           </div>
         </div>
@@ -22,7 +22,7 @@
       <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
         <div class="pdxfinder">
           <div class="pdxfinder-content pdx-badge" style="padding-bottom:10px;" [attr.pdxfinder-badge]="unmappedTreatmentCnt == 0 ? null : unmappedTreatmentCnt">
-            <img (click)="onClick('treatment-summary')" src="assets/icons/drug.png" class="icon pdxfinder-clickable-area">
+            <img (click)="onClick('treatment-summary')" src="assets/icons/drug.png" alt="Treatment Mapping" class="icon pdxfinder-clickable-area">
             <div class='text-navy pdx-singleLine'> TREATMENT MAPPING </div>
           </div>
         </div>
@@ -30,7 +30,7 @@
       <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
         <div class="pdxfinder">
           <div class="pdxfinder-content pdx-badge" style="padding-bottom:10px;" [attr.pdxfinder-badge]="orphanedTerms == 0 ? null : orphanedTerms">
-            <img (click)="onClick('orphan')" src="assets/icons/broken.png" class="icon pdxfinder-clickable-area">
+            <img (click)="onClick('orphan')" src="assets/icons/broken.png" alt="Orphaned Mapping" class="icon pdxfinder-clickable-area">
             <div class='text-navy pdx-singleLine'> ORPHANED MAPPINGS </div>
           </div>
         </div>
@@ -38,7 +38,7 @@
       <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
         <div class="pdxfinder">
           <div class="pdxfinder-content" style="padding-bottom:10px;">
-            <img (click)="onClick('manage')" src="assets/icons/Settings-icon.png" class="icon pdxfinder-clickable-area" style="padding-bottom: 10px">
+            <img (click)="onClick('manage')" src="assets/icons/Settings-icon.png" alt="Manage Curations" class="icon pdxfinder-clickable-area" style="padding-bottom: 10px">
             <div class='text-navy pdx-singleLine'> MANAGE CURATIONS </div>
           </div>
         </div>
@@ -46,7 +46,7 @@
         <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
             <div class="pdxfinder">
                 <div class="pdxfinder-content" style="padding-bottom:10px;">
-                    <img (click)="onClick('validate')" src="assets/icons/validate.png" class="icon pdxfinder-clickable-area" style="padding: 10px">
+                    <img (click)="onClick('validate')" src="assets/icons/validate.png" alt="Validate Terms" class="icon pdxfinder-clickable-area" style="padding: 10px">
                     <div class='text-navy pdx-singleLine'> VALIDATE TERMS </div>
                 </div>
             </div>
@@ -54,7 +54,7 @@
       <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
         <div class="pdxfinder">
           <div class="pdxfinder-content" style="padding-bottom:10px;">
-            <img (click)="onClick('archive')" src="assets/icons/document-compress-icon.png" class="icon pdxfinder-clickable-area" style="padding-bottom: 10px">
+            <img (click)="onClick('archive')" src="assets/icons/document-compress-icon.png" alt="Archive" class="icon pdxfinder-clickable-area" style="padding-bottom: 10px">
             <div class='text-navy pdx-singleLine'> ARCHIVE </div>
           </div>
         </div>

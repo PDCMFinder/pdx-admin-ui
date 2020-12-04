@@ -99,7 +99,7 @@ span.ui-column-resizer {
 }
 
 .col-lg-2-5,
-col-lg-9-5 {
+.col-lg-9-5 {
   float: left;
 }
 
@@ -770,7 +770,7 @@ a.collapseAppMenu:hover {
 
 .label,
 .badge {
-  font-family: "Roboto";
+  font-family: Roboto, sans-serif;
 }
 .font-bold {
   font-weight: 500;
@@ -1335,7 +1335,6 @@ fieldset[disabled] .btn-link.active {
   border: 1px solid #e7eaec;
 }
 .btn-github {
-  color: inherit;
   background: #333333;
   border: 1px solid #e7eaec;
   color: #ffffff;
@@ -1832,7 +1831,7 @@ label.error {
   width: 500px;
   height: 300px;
 }
-.ngH eaderCell {
+.ngHeaderCell {
   border-right: none;
   border-bottom: 1px solid #e7eaec;
 }
@@ -1854,16 +1853,13 @@ label.error {
 .ngCell {
   background-color: transparent;
 }
-.ngHeaderCell {
-  border-right: none;
-}
 /* Toastr custom style */
 #toast-container > .toast {
   background-image: none !important;
 }
 #toast-container > .toast:before {
   position: fixed;
-  font-family: FontAwesome;
+  font-family: FontAwesome, sans-serif;
   font-size: 24px;
   line-height: 24px;
   float: left;
@@ -3265,10 +3261,6 @@ del {
   text-align: center;
 }
 
-pdxSmall {
-  font-size: 10px;
-}
-
 @media (min-width: 768px) {
   #page-wrapper {
     position: inherit;
@@ -3666,7 +3658,7 @@ font-size: 13px;
   border-radius: 100%;
   -moz-transform: scale(0);
   -ms-transform: scale(0);
-  webkit-transform: scale(0);
+  -webkit-transform: scale(0);
   transform: scale(0);
 }
 /*animation effect*/
