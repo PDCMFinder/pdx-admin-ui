@@ -14,8 +14,8 @@
             <div class="col-lg-12">
                 <div class="pdxfinder float-e-margins">
                     <div class="pdxfinder-content pdxfinder-heading">
-                        <h3> <i class="ti-files"></i> Upload Validated File </h3>
-                        <small><i class="fa fa-tim"></i> Ensure you upload CSV File of the required type only ...
+                        <h3> <em class="ti-files"></em> Upload Validated File </h3>
+                        <small><em class="fa fa-tim"></em> Ensure you upload CSV File of the required type only ...
                         </small>
                     </div>
                     <div class="pdxfinder-content">
@@ -37,7 +37,7 @@
                                             <div id='output' class='styleFile'>
                                                 <span *ngIf="report == null"> Click here to upload your File </span>
                                                 <span *ngIf="report == 'waiting'">Waiting ... Click on upload button to
-                                                    send Data File:<b class="text-primary"> {{uploadedFilename}}</b>
+                                                    send Data File:<strong class="text-primary"> {{uploadedFilename}}</strong>
                                                 </span>
                                                 <span *ngIf="report == 'success'"> File upload done! Click here to
                                                     Upload another file </span>
@@ -52,7 +52,7 @@
                                     <div>
                                         <button [disabled]="!selectedFiles" (click)="upload()"
                                             class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit">
-                                            <strong> <i class="ti-cloud-up"></i> &nbsp; Upload File </strong>
+                                            <strong> <em class="ti-cloud-up"></em> &nbsp; Upload File </strong>
                                         </button>
                                     </div>
                                 </form>
@@ -62,7 +62,7 @@
                 </div>
                 <div *ngIf="showCSV" class="pdxfinder float-e-margins" style="margin-top: -15px;">
                     <div class="pdxfinder-content pdxfinder-heading2">
-                        <i class="ti-alert"></i> Please Ensure <b> {{uploadedFilename | uppercase }} </b> is a valid
+                        <em class="ti-alert"></em> Please Ensure <strong> {{uploadedFilename | uppercase }} </strong> is a valid
                         curated file ...
                     </div>
                     <div class="pdxfinder-content">
@@ -70,7 +70,7 @@
                             <table class="table table-striped table-bordered table-hover pdx-table">
                                 <thead>
                                     <tr>
-                                        <th *ngFor="let columnHeader of parsedCsvHead index as i">
+                                        <th scope="col" *ngFor="let columnHeader of parsedCsvHead index as i">
                                             {{columnHeader | uppercase }}
                                         </th>
                                     </tr>

@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MappingService } from '../mapping.service';
-import { Mapping, MappingInterface, MappingValues } from '../mapping-interface';
 import { GeneralService } from '../general.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
-
-declare var swal: any;
 
 @Component({
     selector: 'app-manage',
