@@ -110,6 +110,8 @@ export class DatasourceSpecificComponent implements OnInit {
     }
 
     getOLSTerms(entityType) {
+        console.log('getOLSTerms');
+
         this.mappingService.getOLS(entityType)
             .subscribe(
                 data => {
