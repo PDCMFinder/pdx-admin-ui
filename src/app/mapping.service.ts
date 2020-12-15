@@ -11,14 +11,14 @@ import { SummaryInterface } from './summary-interface';
 export class MappingService {
 
     private devServer = 'http://ves-ebi-bc.ebi.ac.uk:8081';
-    private SERVER_URL = 'http://localhost:8081'; // this.devServer; //
-    private BASE_URL = this.SERVER_URL + '/api/mappings';
+    private readonly SERVER_URL = 'http://localhost:8081'; // this.devServer; //
+    private readonly BASE_URL = this.SERVER_URL + '/api/mappings';
 
-    private SUMMARY_URL = this.BASE_URL + '/summary';
-    private MAPPINGS_URL = this.BASE_URL;
-    private MISSING_MAPPINGS_URL = this.BASE_URL + '/getmissingmappings';
-    public EXPORT_URL = this.BASE_URL + '/export';
-    private UPLOAD_URL = this.BASE_URL + '/uploads';
+    private readonly SUMMARY_URL = this.BASE_URL + '/summary';
+    private readonly MAPPINGS_URL = this.BASE_URL;
+    private readonly MISSING_MAPPINGS_URL = this.BASE_URL + '/getmissingmappings';
+    public readonly EXPORT_URL = this.BASE_URL + '/export';
+    private readonly UPLOAD_URL = this.BASE_URL + '/uploads';
 
     private dataSubject = new Subject<any>();
     private stringDataBusSubject = new Subject<any>();
