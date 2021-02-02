@@ -1,6 +1,6 @@
 import { HttpClientModule } from '@angular/common/http';
 import { DebugElement } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MappingService } from '../mapping.service';
 
@@ -25,7 +25,7 @@ describe('CurationMappingComponent', () => {
   let de: DebugElement;
   let mappingService: MappingService;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ CurationMappingComponent ],
       imports: [
