@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { CurationArchiveComponent } from './curation-archive.component';
 
@@ -6,7 +6,7 @@ describe('CurationArchiveComponent', () => {
   let component: CurationArchiveComponent;
   let fixture: ComponentFixture<CurationArchiveComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ CurationArchiveComponent ]
     })
