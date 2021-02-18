@@ -44,7 +44,7 @@ services:
 
 
 stages:
-  - env
+#  - env
   - build
 
 # env:
