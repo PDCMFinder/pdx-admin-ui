@@ -4,14 +4,14 @@ import { Mapping, MappingInterface } from './mapping-interface';
 import { Observable, Subject, throwError } from 'rxjs/index';
 import { catchError } from 'rxjs/internal/operators';
 import { SummaryInterface } from './summary-interface';
+import { environment } from './../environments/environment';
 
 @Injectable({
     providedIn: 'root'
 })
 export class MappingService {
 
-    private devServer = 'http://ves-ebi-bc.ebi.ac.uk:8081';
-    private readonly SERVER_URL = 'http://localhost:8081'; // this.devServer; //
+    private readonly SERVER_URL = environment.apiServer;
     private readonly BASE_URL = this.SERVER_URL + '/api/mappings';
 
     private readonly SUMMARY_URL = this.BASE_URL + '/summary';
@@ -50,7 +50,6 @@ export class MappingService {
 
     getUnmappedTermsByType(entityType: string): Observable<MappingInterface> {
         const url = `${this.MAPPINGS_URL}?entity-type=${entityType}&status=unmapped`;
-        console.log('getUnmappedTermsByType', url);
 
         return this.http.get<MappingInterface>(url);
     }
