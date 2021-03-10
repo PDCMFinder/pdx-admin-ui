@@ -60,23 +60,13 @@ build_image:
 
     - sed -i "s|FROM node|FROM ${LOCAL_GITLAB_NODE_IMAGE}|g" Dockerfile       
     - sed -i "s|FROM nginx|FROM ${LOCAL_GITLAB_NGINX_IMAGE}|g" Dockerfile       
-    - docker build -t "${CI_REGISTRY_IMAGE}":"${CI_COMMIT_SHA:0:12}" -t "${CI_REGISTRY_IMAGE}":latest .  | tee ${MOUNT_POINT}/build.log
+    #- docker build -t "${CI_REGISTRY_IMAGE}":"${CI_COMMIT_SHA:0:12}" -t "${CI_REGISTRY_IMAGE}":latest .  | tee ${MOUNT_POINT}/build.log
 
-    - docker push "${CI_REGISTRY_IMAGE}":"${CI_COMMIT_SHA:0:12}"  | tee ${MOUNT_POINT}/push.log
-    - docker push "${CI_REGISTRY_IMAGE}":latest  | tee ${MOUNT_POINT}/push.log
+    #- docker push "${CI_REGISTRY_IMAGE}":"${CI_COMMIT_SHA:0:12}"  | tee ${MOUNT_POINT}/push.log
+    #- docker push "${CI_REGISTRY_IMAGE}":latest  | tee ${MOUNT_POINT}/push.log
 
-    - docker logout ${CI_REGISTRY}
+    #- docker logout ${CI_REGISTRY}
 
-    # Only build for the MPI2 webapp-impc-production-tracker repository rather than repository forks
-    - |
-      if [[ "${DOCKER_HUB_PUSH}" == "true" ]]; then
-          echo "${DOCKER_HUB_PSWD}" | docker login -u "${DOCKER_HUB_USER}" --password-stdin
-          docker tag "${CI_REGISTRY_IMAGE}":"${CI_COMMIT_SHA:0:12}" "${DOCKER_HUB_USER}"/"${DOCKER_HUB_REPO}":"${CI_COMMIT_SHA:0:12}"
-          docker tag "${CI_REGISTRY_IMAGE}":"${CI_COMMIT_SHA:0:12}" "${DOCKER_HUB_USER}"/"${DOCKER_HUB_REPO}":latest
-          docker push "${DOCKER_HUB_USER}"/"${DOCKER_HUB_REPO}":"${CI_COMMIT_SHA:0:12}"  | tee ${MOUNT_POINT}/dockerhub-push-latest.log
-          docker push "${DOCKER_HUB_USER}"/"${DOCKER_HUB_REPO}":latest  | tee ${MOUNT_POINT}/dockerhub-push-latest.log
-          docker logout
-      fi
   artifacts:
     paths:
       - "$MOUNT_POINT/"
