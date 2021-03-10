@@ -1,98 +1,91 @@
-image: docker:stable
-
-variables:
-  # When using dind service we need to instruct docker, to talk with the
-  # daemon started inside of the service. The daemon is available with
-  # a network connection instead of the default /var/run/docker.sock socket.
-  #
-  # The 'docker' hostname is the alias of the service container as described at
-  # https://docs.gitlab.com/ee/ci/docker/using_docker_images.html#accessing-the-services
-  #
-  # Note that if you're using the Kubernetes executor, the variable should be set to
-  # tcp://localhost:2375/ because of how the Kubernetes executor connects services
-  # to the job container
-  # DOCKER_HOST: tcp://localhost:2375/
-  #
-  # For non-Kubernetes executors, we use tcp://docker:2375/
-  DOCKER_HOST: tcp://docker:2375/
-  # When using dind, it's wise to use the overlayfs driver for
-  # improved performance.
-  DOCKER_DRIVER: overlay2
-
-  # Since the docker:dind container and the runner container don’t share their root
-  # filesystem, the job’s working directory can be used as a mount point for children
-  # containers. For example, if you have files you want to share with a child container,
-  # you may create a subdirectory under /builds/$CI_PROJECT_PATH and use it as your
-  # mount point.
-  MOUNT_POINT: /builds/$CI_PROJECT_PATH/mnt
-
-  # For EBI you need to override the definition of CI_REGISTRY to remove the port number
-  CI_REGISTRY: dockerhub.ebi.ac.uk
-  CI_REGISTRY_IMAGE: $CI_REGISTRY/$CI_PROJECT_PATH
-
-  #NOW: $(date '+%Y-%m-%d-%H-%M-%S')
-  #NOW: $(date '+%Y-%m-%d')
-
-  # To solve the issue with the Docker in Docker 19.03 service.
-  # Logged as: GitLab.com CI jobs failing if using docker:stable-dind image
-  # see: https://gitlab.com/gitlab-com/gl-infra/production/issues/982
-  DOCKER_TLS_CERTDIR: ""
-
-services:
-  - docker:dind
-
-
-
 stages:
-#  - env
   - build
-
-# env:
-#   stage: env
-#   script:
-#     - export
-#     - echo '================================='
-#     - echo $PRODUCTION_DEPLOYMENT
-#     - echo $CI_PIPELINE_SOURCE
-#
-# env_rules:
-#   stage: env
-#   rules:
-#     - if: '$PRODUCTION_DEPLOYMENT == "true" && $CI_PIPELINE_SOURCE == "schedule"'
-#   script:
-#     - echo '================================='
-#     - echo $PRODUCTION_DEPLOYMENT
-#     - echo $CI_PIPELINE_SOURCE
-
+  - deploy
 
 build_image:
+  image: maven:3.6.3-openjdk-11
   stage: build
+  services:
+    - name: $CI_REGISTRY/mouse-informatics/dind:latest
+      alias: docker
   except:
     - schedules
   before_script:
-    - docker info
+    # - docker info
     - mkdir -p "$MOUNT_POINT"
     - echo "${CI_REGISTRY_PASSWORD}" | docker login -u "${CI_REGISTRY_USER}" --password-stdin  ${CI_REGISTRY}
+  
   script:
 
-    # Try to pull the image from the registry so that it can be used as a cache for the docker build command
-    - docker pull $CI_REGISTRY_IMAGE:latest || true
+    - sed -i "s|FROM node|FROM ${LOCAL_GITLAB_NODE_IMAGE}|g" Dockerfile       
+    - sed -i "s|FROM nginx|FROM ${LOCAL_GITLAB_NGINX_IMAGE}|g" Dockerfile       
+    - docker build -t "${CI_REGISTRY_IMAGE}":"${CI_COMMIT_SHA:0:12}" -t "${CI_REGISTRY_IMAGE}":latest .  | tee ${MOUNT_POINT}/build.log
 
-    - docker build --cache-from $CI_REGISTRY_IMAGE:latest -t "${CI_REGISTRY_IMAGE}":"${CI_COMMIT_SHA:0:12}" -t "${CI_REGISTRY_IMAGE}":latest .  | tee ${MOUNT_POINT}/build.log
-
-    - docker push "${CI_REGISTRY_IMAGE}"  | tee ${MOUNT_POINT}/push.log
+    - docker push "${CI_REGISTRY_IMAGE}":"${CI_COMMIT_SHA:0:12}"  | tee ${MOUNT_POINT}/push.log
+    - docker push "${CI_REGISTRY_IMAGE}":latest  | tee ${MOUNT_POINT}/push.log
 
     - docker logout ${CI_REGISTRY}
 
     # Only build for the MPI2 webapp-impc-production-tracker repository rather than repository forks
-    - |
-      if [[ "${DOCKER_HUB_PUSH}" == "true" ]]; then
-          echo "${DOCKER_HUB_PSWD}" | docker login -u "${DOCKER_HUB_USER}" --password-stdin
-          docker tag "${CI_REGISTRY_IMAGE}":"${CI_COMMIT_SHA:0:12}" "${DOCKER_HUB_USER}"/"${DOCKER_HUB_REPO}":"${CI_COMMIT_SHA:0:12}"
-          docker tag "${CI_REGISTRY_IMAGE}":"${CI_COMMIT_SHA:0:12}" "${DOCKER_HUB_USER}"/"${DOCKER_HUB_REPO}":latest
-          docker push "${DOCKER_HUB_USER}"/"${DOCKER_HUB_REPO}"  | tee ${MOUNT_POINT}/dockerhub-push-latest.log
-          docker logout
-      fi
+    # - |
+    #   if [[ "${DOCKER_HUB_PUSH}" == "true" ]]; then
+    #       echo "${DOCKER_HUB_PSWD}" | docker login -u "${DOCKER_HUB_USER}" --password-stdin
+    #       docker tag "${CI_REGISTRY_IMAGE}":"${CI_COMMIT_SHA:0:12}" "${DOCKER_HUB_USER}"/"${DOCKER_HUB_REPO}":"${CI_COMMIT_SHA:0:12}"
+    #       docker tag "${CI_REGISTRY_IMAGE}":"${CI_COMMIT_SHA:0:12}" "${DOCKER_HUB_USER}"/"${DOCKER_HUB_REPO}":latest
+    #       docker push "${DOCKER_HUB_USER}"/"${DOCKER_HUB_REPO}":"${CI_COMMIT_SHA:0:12}"  | tee ${MOUNT_POINT}/dockerhub-push-latest.log
+    #       docker push "${DOCKER_HUB_USER}"/"${DOCKER_HUB_REPO}":latest  | tee ${MOUNT_POINT}/dockerhub-push-latest.log
+    #       docker logout
+    #   fi
   artifacts:
     paths:
       - "$MOUNT_POINT/"
+  only:
+    refs:
+      - master
+      - dev
+
+deploy-HH-WP-WEBADMIN-dev:
+  stage: deploy
+  image: dtzar/helm-kubectl:2.13.0
+  script:
+    - kubectl config set-cluster local --server="${HH_WP_WEBADMIN_ENDPOINT}"
+    - kubectl config set clusters.local.certificate-authority-data "${HH_WP_WEBADMIN_ENDPOIN_CERTIFICATE_AUTHORITY}"
+    - kubectl config set-credentials ${KUBERNETES_USER} --token="${HH_WP_WEBADMIN_ENDPOIN_DEV_USER_TOKEN}"
+    - kubectl config set-context "${HH_WP_WEBADMIN_DEV_NAMESPACE}" --cluster=local --user=${HH_WP_WEBADMIN_DEV_USER} --namespace="${HH_WP_WEBADMIN_DEV_NAMESPACE}"
+    - kubectl config use-context "${HH_WP_WEBADMIN_DEV_NAMESPACE}"
+    - kubectl version
+
+    - sed -i "s/dev/$CI_COMMIT_SHA/g' /k8-deploy/dev/deployment
+
+    - kubectl apply -f k8-deploy/dev/deployment.yml --record
+    - kubectl rollout status -f k8-deploy/dev/deployment.yml
+
+    - kubectl apply -f k8-deploy/dev/service.yml --record
+    - kubectl apply -f k8-deploy/dev/ingress.yml --record
+    - kubectl get pods,service,deploy,replicaset,ing
+  only:
+    refs:
+      - dev
+
+deploy-HH-WP-WEBADMIN-master:
+  stage: deploy
+  image: dtzar/helm-kubectl:2.13.0
+  script:
+    - kubectl config set-cluster local --server="${HH_WP_WEBADMIN_ENDPOINT}"
+    - kubectl config set clusters.local.certificate-authority-data "${HH_WP_WEBADMIN_CERTIFICATE_AUTHORITY}"
+    - kubectl config set-credentials ${HH_WP_WEBADMIN_USER} --token="${HH_WP_WEBADMIN_USER_TOKEN}"
+    - kubectl config set-context "${HH_WP_WEBADMIN_NAMESPACE}" --cluster=local --user=${HH_WP_WEBADMIN_USER} --namespace="${HH_WP_WEBADMIN_NAMESPACE}"
+    - kubectl config use-context "${HH_WP_WEBADMIN_NAMESPACE}"
+    - kubectl version
+
+    - sed -i "s/master/$CI_COMMIT_SHA/g' /k8-deploy/prod/deployment
+
+    - kubectl apply -f k8-deploy/prod/deployment.yml --record
+    - kubectl rollout status -f k8-deploy/prod/deployment.yml
+
+    - kubectl apply -f k8-deploy/prod/service.yml --record
+    - kubectl apply -f k8-deploy/prod/ingress.yml --record
+    - kubectl get pods,service,deploy,replicaset,ing
+  only:
+    refs:
+      - master
