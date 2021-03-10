@@ -59,8 +59,12 @@ build_image:
   script:
 
     - sed -i "s|FROM node|FROM ${LOCAL_GITLAB_NODE_IMAGE}|g" Dockerfile       
-    - sed -i "s|FROM nginx|FROM ${LOCAL_GITLAB_NGINX_IMAGE}|g" Dockerfile       
-    #- docker build -t "${CI_REGISTRY_IMAGE}":"${CI_COMMIT_SHA:0:12}" -t "${CI_REGISTRY_IMAGE}":latest .  | tee ${MOUNT_POINT}/build.log
+    - sed -i "s|FROM nginx|FROM ${LOCAL_GITLAB_NGINX_IMAGE}|g" Dockerfile
+    - echo ">>CI_REGISTRY_IMAGE  ${CI_REGISTRY_IMAGE}"
+    - echo ">>CI_COMMIT_SHA:0:12  ${CI_COMMIT_SHA:0:12}"
+    - echo ">>MOUNT_POINT  ${MOUNT_POINT}"
+    - echo "about to execute docker build"             
+    - docker build -t "${CI_REGISTRY_IMAGE}":"${CI_COMMIT_SHA:0:12}" -t "${CI_REGISTRY_IMAGE}":latest .  | tee ${MOUNT_POINT}/build.log
 
     #- docker push "${CI_REGISTRY_IMAGE}":"${CI_COMMIT_SHA:0:12}"  | tee ${MOUNT_POINT}/push.log
     #- docker push "${CI_REGISTRY_IMAGE}":latest  | tee ${MOUNT_POINT}/push.log
