@@ -74,6 +74,12 @@ deploy-HH-WP-WEBADMIN-dev:
   stage: deploy
   image: dtzar/helm-kubectl:2.13.0
   script:
+    - echo "Printing variables"
+    - echo "ex HH_WP_WEBADMIN_CERTIFICATE_AUTHORITY ${HH_WP_WEBADMIN_CERTIFICATE_AUTHORITY}"
+    - echo "$HH_WP_WEBADMIN_ENDPOINT"
+    - echo "$HH_WP_WEBADMIN_CERTIFICATE_AUTHORITY"
+    - echo "$KUBERNETES_USER"
+    - echo "$HH_WP_WEBADMIN_DEV_USER_TOKEN"
     - kubectl config set-cluster local --server="${HH_WP_WEBADMIN_ENDPOINT}"
     - kubectl config set clusters.local.certificate-authority-data "${HH_WP_WEBADMIN_CERTIFICATE_AUTHORITY}"
     - kubectl config set-credentials ${KUBERNETES_USER} --token="${HH_WP_WEBADMIN_DEV_USER_TOKEN}"
