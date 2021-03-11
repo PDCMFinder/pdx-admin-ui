@@ -42,7 +42,7 @@ variables:
 
 
 stages:
-   #- build
+  - build
   - deploy
 
 build_image:
@@ -56,11 +56,12 @@ build_image:
     # - docker info
     - mkdir -p "$MOUNT_POINT"
     - echo "${CI_REGISTRY_PASSWORD}" | docker login -u "${CI_REGISTRY_USER}" --password-stdin  ${CI_REGISTRY}
-  script:            
-    - docker build -t "${CI_REGISTRY_IMAGE}":"${CI_COMMIT_SHA:0:12}" -t "${CI_REGISTRY_IMAGE}":latest .  | tee ${MOUNT_POINT}/build.log
-    - docker push "${CI_REGISTRY_IMAGE}":"${CI_COMMIT_SHA:0:12}"  | tee ${MOUNT_POINT}/push.log
-    - docker push "${CI_REGISTRY_IMAGE}":latest  | tee ${MOUNT_POINT}/push.log
-    - docker logout ${CI_REGISTRY}
+  script:
+    - echo "docker image..."            
+    # - docker build -t "${CI_REGISTRY_IMAGE}":"${CI_COMMIT_SHA:0:12}" -t "${CI_REGISTRY_IMAGE}":latest .  | tee ${MOUNT_POINT}/build.log
+    # - docker push "${CI_REGISTRY_IMAGE}":"${CI_COMMIT_SHA:0:12}"  | tee ${MOUNT_POINT}/push.log
+    # - docker push "${CI_REGISTRY_IMAGE}":latest  | tee ${MOUNT_POINT}/push.log
+    # - docker logout ${CI_REGISTRY}
 
   artifacts:
     paths:
