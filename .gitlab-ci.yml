@@ -82,7 +82,7 @@ deploy-HH-WP-WEBADMIN-dev:
     - kubectl config use-context "${HH_WP_WEBADMIN_DEV_NAMESPACE}"
     - kubectl version
 
-    - sed -i "s/dev/$CI_COMMIT_SHA/g' /k8-deploy/dev/deployment
+    - sed -i "s/dev/$CI_COMMIT_SHA/g' /k8-deploy/nodeport_deploy/dev/deployment
 
     - kubectl apply -f k8-deploy/nodeport_deploy/dev/deployment.yml --record
     - kubectl rollout status -f k8-deploy/nodeport_deploy/dev/deployment.yml
