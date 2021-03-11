@@ -42,8 +42,8 @@ variables:
 
 
 stages:
-  - env
   - build
+  - deploy
 
 build_image:
   stage: build
@@ -109,4 +109,3 @@ deploy-HH-WP-WEBADMIN-master:
   only:
     refs:
       - master
-
