@@ -42,7 +42,7 @@ variables:
 
 
 stages:
-  - build
+   #- build
   - deploy
 
 build_image:
