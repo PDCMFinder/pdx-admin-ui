@@ -56,16 +56,20 @@ build_dev_image:
     - mkdir -p "$MOUNT_POINT"
     - echo "${CI_REGISTRY_PASSWORD}" | docker login -u "${CI_REGISTRY_USER}" --password-stdin  ${CI_REGISTRY}
   script:
-    - echo "Building dev image"
+    - |
+      if [[ "${REQUIRES_REBUILD_IMAGE}" == "true" ]]; then
 
-    - docker build -t "${CI_REGISTRY_IMAGE}":dev -f Dockerfile-dev .  | tee ${MOUNT_POINT}/build.log
-    - docker push "${CI_REGISTRY_IMAGE}":dev  | tee ${MOUNT_POINT}/push.log
-    - docker logout ${CI_REGISTRY}
+          echo "Building prod image" 
 
-    - echo "Pushing to docker hub"
-    - echo "${DOCKER_HUB_PWD}" | docker login --username "${DOCKER_HUB_USER}" --password-stdin
-    - docker tag "${CI_REGISTRY_IMAGE}":dev "${DOCKER_HUB_USER}"/"${DOCKER_HUB_REPO}":dev
-    - docker push "${DOCKER_HUB_USER}"/"${DOCKER_HUB_REPO}":dev  | tee ${MOUNT_POINT}/dockerhub-push-latest.log
+          docker build -t "${CI_REGISTRY_IMAGE}":dev -f Dockerfile-dev .  | tee ${MOUNT_POINT}/build.log
+          docker push "${CI_REGISTRY_IMAGE}":dev  | tee ${MOUNT_POINT}/push.log
+          docker logout ${CI_REGISTRY}
+
+          echo "Pushing to docker hub"
+          echo "${DOCKER_HUB_PWD}" | docker login --username "${DOCKER_HUB_USER}" --password-stdin
+          docker tag "${CI_REGISTRY_IMAGE}":dev "${DOCKER_HUB_USER}"/"${DOCKER_HUB_REPO}":dev
+          docker push "${DOCKER_HUB_USER}"/"${DOCKER_HUB_REPO}":dev  | tee ${MOUNT_POINT}/dockerhub-push-latest.log
+      fi
     - docker logout
 
   artifacts:
@@ -86,15 +90,20 @@ build_master_image:
     - mkdir -p "$MOUNT_POINT"
     - echo "${CI_REGISTRY_PASSWORD}" | docker login -u "${CI_REGISTRY_USER}" --password-stdin  ${CI_REGISTRY}
   script:
-    - echo "Building prod image"            
-    - docker build -t "${CI_REGISTRY_IMAGE}":"${CI_COMMIT_SHA:0:12}" -t "${CI_REGISTRY_IMAGE}":latest .  | tee ${MOUNT_POINT}/build.log
-    - docker push "${CI_REGISTRY_IMAGE}":latest  | tee ${MOUNT_POINT}/push.log
-    - docker logout ${CI_REGISTRY}
+    - |
+      if [[ "${REQUIRES_REBUILD_IMAGE}" == "true" ]]; then
 
-    - echo "Pushing to docker hub"
-    - echo "${DOCKER_HUB_PWD}" | docker login -u "${DOCKER_HUB_USER}" --password-stdin
-    - docker tag "${CI_REGISTRY_IMAGE}":latest "${DOCKER_HUB_USER}"/"${DOCKER_HUB_REPO}":latest
-    - docker push "${DOCKER_HUB_USER}"/"${DOCKER_HUB_REPO}":latest  | tee ${MOUNT_POINT}/dockerhub-push-latest.log
+          echo "Building prod image"
+          echo "Building prod image"            
+          docker build -t "${CI_REGISTRY_IMAGE}":"${CI_COMMIT_SHA:0:12}" -t "${CI_REGISTRY_IMAGE}":latest .  | tee ${MOUNT_POINT}/build.log
+          docker push "${CI_REGISTRY_IMAGE}":latest  | tee ${MOUNT_POINT}/push.log
+          docker logout ${CI_REGISTRY}
+
+          echo "Pushing to docker hub"
+          echo "${DOCKER_HUB_PWD}" | docker login -u "${DOCKER_HUB_USER}" --password-stdin
+          docker tag "${CI_REGISTRY_IMAGE}":latest "${DOCKER_HUB_USER}"/"${DOCKER_HUB_REPO}":latest
+          docker push "${DOCKER_HUB_USER}"/"${DOCKER_HUB_REPO}":latest  | tee ${MOUNT_POINT}/dockerhub-push-latest.log
+      fi
     - docker logout
 
   artifacts:
