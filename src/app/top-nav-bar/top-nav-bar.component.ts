@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import { environment } from 'src/environments/environment';
+
 
 @Component({
   selector: 'app-top-nav-bar',
   templateUrl: './top-nav-bar.component.html',
-  styles: [``]
+  styleUrls: ['./top-nav-bar.component.css']
 })
 export class TopNavBarComponent implements OnInit {
 
   private setFont = 13;
+  isDevEnv = !environment.production;
 
   constructor() { }
 

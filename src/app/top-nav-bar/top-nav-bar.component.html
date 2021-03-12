@@ -4,6 +4,10 @@
             <button class="navbar-minimalize minimalize-styl-2 btn btn-primary" href="#" style="margin: 4px;"><em
                     class="ti-location-arrow" style="font-size: 25px;"></em></button>
         </div>
+        <div *ngIf="isDevEnv" class="banner">
+            This is a dev env
+        </div>
+        
         <ul class="nav navbar-top-links navbar-right" style="margin-right: 50px; margin-top: 10px;">
             <button (click)="toggleSystemFont('plus')" class="btn btn-default btn-circle"><em class="ti-plus"
                     style="font-size: 16px;"></em></button>
