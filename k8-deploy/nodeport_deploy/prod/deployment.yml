@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: pdx-admin-ui
+  namespace: pdx-admin-interface
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: pdx-admin-ui
+    spec:
+      containers:
+        - name: pdx-admin-ui
+          image: 'pdxfinder/pdx-admin-ui:latest'
+          ports:
+            - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: pdx-admin-ui-service
+  namespace: pdx-admin-interface
+  labels:
+    name: pdx-admin-ui-service
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 31627
+  selector:
+    app: pdx-admin-ui
+  type: NodePort

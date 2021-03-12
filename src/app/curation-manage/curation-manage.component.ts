@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MappingService } from '../mapping.service';
-import { Mapping, MappingInterface, MappingValues } from '../mapping-interface';
 import { GeneralService } from '../general.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
-
-declare var swal: any;
 
 @Component({
     selector: 'app-manage',
@@ -87,7 +83,7 @@ export class CurationManageComponent implements OnInit {
     manageCuratedData(page, size, type, status, source) {
         const sourceFiter = (source === null) ? '' : `&mq=datasource:${source}`;
         const statusFiter = (status === '') ? '' : `&status=${status}`;
-        this.csvURL = `${this.mappingService.exportUrl}?entity-type=${type}&page=${page}${statusFiter}${sourceFiter}`;
+        this.csvURL = `${this.mappingService.EXPORT_URL}?entity-type=${type}&page=${page}${statusFiter}${sourceFiter}`;
         this.columnHeaders = [];
         this.mappings = [];
         this.mappingService.getManagedTerms(type, source, page, size, status)

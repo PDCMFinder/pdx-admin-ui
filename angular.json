@@ -18,13 +18,14 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": false,
+            "aot": true,
             "assets": [
               "src/favicon.ico",
               "src/assets",
               "src/pdxfinder"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css",
               "src/pdxfinder/pattern-library/bootstrap.min.css",
               "src/pdxfinder/pattern-library/datatables.min.css",
@@ -64,9 +65,7 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -82,6 +81,14 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "dev": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dev.ts"
+                }
+              ]
             }
           }
         },
@@ -93,6 +100,9 @@
           "configurations": {
             "production": {
               "browserTarget": "pdx-admin-ui:build:production"
+            },
+            "dev": {
+              "browserTarget": "pdx-admin-ui:build:dev"
             }
           }
         },
@@ -115,6 +125,7 @@
               "src/pdxfinder"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css",
               "src/pdxfinder/pattern-library/bootstrap.min.css",
               "src/pdxfinder/pattern-library/datatables.min.css",
@@ -166,10 +177,14 @@
           "configurations": {
             "production": {
               "devServerTarget": "pdx-admin-ui:serve:production"
+            },
+            "dev": {
+              "devServerTarget": "pdx-admin-ui:serve:dev"
             }
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "pdx-admin-ui"
 }

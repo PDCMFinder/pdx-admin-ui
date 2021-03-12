@@ -1,68 +1,81 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpRequest, HttpEvent, HttpHeaders} from '@angular/common/http';
-import {Mapping, MappingInterface} from './mapping-interface';
-import {Observable, Subject, throwError} from 'rxjs/index';
-import {catchError} from 'rxjs/internal/operators';
-import {SummaryInterface} from './summary-interface';
+import { HttpClient, HttpErrorResponse, HttpEvent } from '@angular/common/http';
+import { Mapping, MappingInterface } from './mapping-interface';
+import { Observable, Subject, throwError } from 'rxjs/index';
+import { catchError } from 'rxjs/internal/operators';
+import { SummaryInterface } from './summary-interface';
+import { environment } from './../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class MappingService {
 
-    private devServer = 'http://ves-ebi-bc.ebi.ac.uk:8081';
-    private serverUrl = 'http://localhost:8081'; // this.devServer; //
+    private readonly SERVER_URL = environment.apiServer;
+    private readonly BASE_URL = this.SERVER_URL + '/api/mappings';
 
-    private summaryUrl = this.serverUrl + '/api/mappings/summary';
-    private mappingsUrl = this.serverUrl + '/api/mappings';
-    public exportUrl = this.serverUrl + '/api/mappings/export';
-    private uploadURL = this.serverUrl + '/api/mappings/uploads';
+    private readonly SUMMARY_URL = this.BASE_URL + '/summary';
+    private readonly MAPPINGS_URL = this.BASE_URL;
+    private readonly MISSING_MAPPINGS_URL = this.BASE_URL + '/getmissingmappings';
+    public readonly EXPORT_URL = this.BASE_URL + '/export';
+    private readonly UPLOAD_URL = this.BASE_URL + '/uploads';
 
-    public dataSubject = new Subject<any>();
-    public stringDataBusSubject = new Subject<any>();
+    private dataSubject = new Subject<any>();
+    private stringDataBusSubject = new Subject<any>();
     public eventDataSubject = new Subject<any>();
     public errorReport = null;
 
     constructor(private http: HttpClient) { }
 
+    public getDataSubject() {
+        return this.dataSubject;
+    }
+
+    public getStringDataBusSubject() {
+        return this.stringDataBusSubject;
+    }
+
     getCurationSummary(maptype: string): Observable<SummaryInterface[]> {
         const curationType = (maptype == null) ? '' : `?entity-type=${maptype}`;
-        const url = `${this.summaryUrl}${curationType}`;
+        const url = `${this.SUMMARY_URL}${curationType}`;
+
         return this.http.get<SummaryInterface[]>(url);
     }
 
-    getTerms(status: string, entityType: string, dataSource: string, page: string, size: string): Observable<MappingInterface[]> {
-        const url = `${this.mappingsUrl}?mq=datasource:${dataSource}&entity-type=${entityType}&status=${status}&page=${page}&size=${size}`;
-        return this.http.get<MappingInterface[]>(url);
+    getTerms(status: string, entityType: string, dataSource: string, page: string, size: string): Observable<MappingInterface> {
+        const url = `${this.MAPPINGS_URL}?mq=datasource:${dataSource}&entity-type=${entityType}&status=${status}&page=${page}&size=${size}`;
+
+        return this.http.get<MappingInterface>(url);
     }
 
-    getUnmappedTermsByType(entityType: string): Observable<MappingInterface[]> {
-        const url = `${this.mappingsUrl}?entity-type=${entityType}&status=unmapped`;
-        return this.http.get<MappingInterface[]>(url);
+    getUnmappedTermsByType(entityType: string): Observable<MappingInterface> {
+        const url = `${this.MAPPINGS_URL}?entity-type=${entityType}&status=unmapped`;
+
+        return this.http.get<MappingInterface>(url);
     }
 
 
-    getTermsByStatus(status: string): Observable<MappingInterface[]> {
-        const url = `${this.mappingsUrl}?status=${status}`;
-        return this.http.get<MappingInterface[]>(url);
+    getTermsByStatus(status: string): Observable<MappingInterface> {
+        const url = `${this.MAPPINGS_URL}?status=${status}`;
+        return this.http.get<MappingInterface>(url);
     }
 
-    getManagedTerms(entityType: string, dataSource: string, page: string, size: string, status: string): Observable<MappingInterface[]> {
+    getManagedTerms(entityType: string, dataSource: string, page: string, size: string, status: string): Observable<MappingInterface> {
         let dsQuery = '';
         if (dataSource != null) {
             dsQuery = `&mq=datasource:${dataSource}`;
         }
-        const url = `${this.mappingsUrl}?entity-type=${entityType}&page=${page}&size=${size}&status=${status}${dsQuery}`;
-        return this.http.get<MappingInterface[]>(url);
+        const url = `${this.MAPPINGS_URL}?entity-type=${entityType}&page=${page}&size=${size}&status=${status}${dsQuery}`;
+        return this.http.get<MappingInterface>(url);
     }
 
     getMappingEntityById(entityId: string): Observable<Mapping> {
-        const url = `${this.mappingsUrl}/${entityId}`;
+        const url = `${this.MAPPINGS_URL}/${entityId}`;
         return this.http.get<Mapping>(url);
     }
 
     getOLS(entityId: string): Observable<any> {
-        const url = `${this.mappingsUrl}/ontologies?type=${entityId}`;
+        const url = `${this.MAPPINGS_URL}/ontologies?type=${entityId}`;
         return this.http.get<any>(url);
     }
 
@@ -79,7 +92,7 @@ export class MappingService {
     }
 
     updateEntity(mappings) {
-        return this.http.put<any>(this.mappingsUrl, mappings)
+        return this.http.put<any>(this.MAPPINGS_URL, mappings)
             .pipe(catchError(this.errorHandler));
     }
 
@@ -103,7 +116,8 @@ export class MappingService {
     pushFileToStorage(file: File, entityType: string): Observable<HttpEvent<{}>> {
         const formdata: FormData = new FormData();
         formdata.append('uploads', file);
-        const url = `${this.uploadURL}?entity-type=${entityType}`;
+        const url = `${this.UPLOAD_URL}?entity-type=${entityType}`;
+
         return this.http.post<any>(url, formdata)
             .pipe(
                 catchError(this.errorHandler)
@@ -115,6 +129,10 @@ export class MappingService {
             .then((res) => res.json())
             .then((data) => data)
             .catch(error => console.log(error));
+    }
+
+    getMissingMappings() {
+        return this.http.get<Mapping[]>(this.MISSING_MAPPINGS_URL);
     }
 
 }

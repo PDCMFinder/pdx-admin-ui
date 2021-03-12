@@ -1,12 +1,12 @@
- <div class="row wrapper border-bottom white-bg page-heading">
-    <div class="col-lg-8">
-        <h2>Center Summary - {{mapType}} </h2>
-        <ol class="breadcrumb">
-            <li><a routerLink="/dashboard">Dashboard</a> </li>
-            <li> <a routerLink="/curation">Curation Mappings</a></li>
-            <li class="active">  {{mapType}} Mapping</li>
-        </ol>
-    </div>
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-8">
+    <h2>Center Summary - {{mapType}} </h2>
+    <ol class="breadcrumb">
+      <li><a routerLink="/dashboard">Dashboard</a> </li>
+      <li> <a routerLink="/curation">Curation Mappings</a></li>
+      <li class="active"> {{mapType}} Mapping</li>
+    </ol>
+  </div>
 </div>
 
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -14,39 +14,59 @@
     <div class="row" style="margin-top: -10px;">
       <div class="col-lg-12">
         <div class="pdxfinder float-e-margins">
-            <div class="pdxfinder-title">
-                <h5> {{mapType}} Mapping Status By Data Source</h5>
-            </div>
-            <div class="pdxfinder-content pdxfinder-heading">
-                <h3><i class="ti-agenda"></i> {{mapType}} Mapping </h3>
-                <small><i class="fa fa-tim"></i> You have 70 unmapped {{mapType}} and 16 orphaned {{mapType}}.</small>
-            </div>
+          <div class="pdxfinder-title">
+            <h5> {{mapType}} Mapping Status By Data Source</h5>
+          </div>
+          <div class="pdxfinder-content pdxfinder-heading">
+            <h3><em class="ti-agenda"></em> {{mapType}} Mapping </h3>
+            <small><em class="fa fa-tim"></em> You have 70 unmapped {{mapType}} and 16 orphaned {{mapType}}.</small>
+          </div>
+
           <div class="pdxfinder-content">
-            <div class="table-responsive">
-                <table class="table table-striped table-bordered table-hover" >
-                    <thead>
-                    <tr>
-                        <th style="width:10px;">S/N</th>
-                        <th>SOURCE </th>
-                        <th>MISSING MAPPINGS </th>
-                        <th>TOTAL MAPPED</th>
-                        <th>VALIDATED</th>
-                        <th>UNVALIDATED</th>
-                        <th>ORPHANED</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr *ngFor=" let summary of mappingSummary; index as i ">
-                        <td> {{i+1}} </td>
-                        <td> {{ summary.DataSource | uppercase }} </td>
-                        <td class="clickTd" (click)="onSelect(summary.DataSource, 'unmapped')"> {{ summary.Unmapped }} </td>
-                        <td class="clickTd" (click)="onSelect(summary.DataSource, 'created,validated')"> {{ summary.Mapped }} </td>
-                        <td class="clickTd" (click)="onSelect(summary.DataSource, 'validated')"> {{ summary.Validated }} </td>
-                        <td class="clickTd" (click)="onSelect(summary.DataSource, 'created')"> {{ summary.Created }} </td>
-                        <td class="clickTd" (click)="onSelect(summary.DataSource, 'orphaned')"> {{ summary.Orphaned }} </td>
-                    </tr>
-                    </tbody>
-                </table>
+            <mat-spinner *ngIf="isLoading" diameter="50"></mat-spinner>
+            <div class="table-responsive" *ngIf="!isLoading">
+              <table class="table table-striped table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col" style="width:10px;">S/N</th>
+                    <th scope="col">SOURCE </th>
+                    <th scope="col">MISSING MAPPINGS </th>
+                    <th scope="col">TOTAL MAPPED</th>
+                    <th scope="col">VALIDATED</th>
+                    <th scope="col">UNVALIDATED</th>
+                    <th scope="col">ORPHANED</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor=" let summary of mappingSummary; index as i ">
+                    <td> {{i+1}} </td>
+                    <td> {{ summary.DataSource | uppercase }} </td>
+                    <td class="clickTd" (click)="onSelect(summary.DataSource, 'unmapped')"> {{ summary.Unmapped }} </td>
+                    <td class="clickTd" (click)="onSelect(summary.DataSource, 'created,validated')">
+                      {{ summary.Mapped }} </td>
+                    <td class="clickTd" (click)="onSelect(summary.DataSource, 'validated')"> {{ summary.Validated }}
+                    </td>
+                    <td class="clickTd" (click)="onSelect(summary.DataSource, 'created')"> {{ summary.Created }} </td>
+                    <td class="clickTd" (click)="onSelect(summary.DataSource, 'orphaned')"> {{ summary.Orphaned }} </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div>
+                <button mat-raised-button class="btn btn-primary btn-sm"(click)="onGenerateMissingMappingsClicked()">Generate Missing
+                  Mappings</button>
+                <div class="notification" *ngIf="notificationVisible">
+                  <div *ngIf="!error" class="alert alert-success alert-dismissable">
+                    <a aria-hidden="true" class="close" type="button" (click)="closeNotificationAndReloadPage()">×</a>
+                    {{ successfullMissingRulesGenerationMessage }}.
+                  </div>
+                  <div *ngIf="error" class="alert alert-danger alert-dismissable">
+                    <a aria-hidden="true" class="close" type="button" (click)="closeNotificationAndReloadPage()">×</a>
+                    OOps!! <em> Failed Request: The generation of missing mappings was invalid: {{ error }}. Clear off
+                      notification to continue
+                    </em>.
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
