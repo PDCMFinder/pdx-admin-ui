@@ -115,10 +115,13 @@ deploy-HH-WP-WEBADMIN-dev:
     - kubectl config use-context "${HH_WP_WEBADMIN_DEV_NAMESPACE}"
     - kubectl version
 
-    #- sed -i "s/dev/$CI_COMMIT_SHA/g' /k8-deploy/nodeport_deploy/dev/deployment
+    - if kubectl apply -f k8-deploy/nodeport_deploy/dev/deployment-dev.yml --record | grep -q unchanged; then
+        echo "=> Patching deployment to force image update."
+        kubectl patch -f k8-deploy/nodeport_deploy/dev/deployment-dev.yml --record -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"ci-last-updated\":\"$(date +'%s')\"}}}}}"
+      else
+        echo "=> Deployment apply has changed the object, no need to force image update."
+      fi
 
-    - kubectl apply -f k8-deploy/nodeport_deploy/dev/deployment-dev.yml --record
-    #- kubectl rollout status -f k8-deploy/nodeport_deploy/dev/deployment-dev.yml
     - kubectl get pods,service,deploy,replicaset,ing
   only:
     refs:
@@ -135,9 +138,13 @@ deploy-HH-WP-WEBADMIN-master:
     - kubectl config use-context "${HH_WP_WEBADMIN_NAMESPACE}"
     - kubectl version
 
-    - sed -i "s/master/$CI_COMMIT_SHA/g' /k8-deploy/nodeport_deploy/prod/deployment
+    - if kubectl apply -f k8-deploy/prod/nodeport_deploy/deployment.yml --record | grep -q unchanged; then
+        echo "=> Patching deployment to force image update."
+        kubectl patch -f k8-deploy/prod/nodeport_deploy/deployment.yml --record "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"ci-last-updated\":\"$(date +'%s')\"}}}}}"
+      else
+        echo "=> Deployment apply has changed the object, no need to force image update."
+      fi
 
-    - kubectl apply -f k8-deploy/prod/nodeport_deploy/deployment.yml --record
     - kubectl rollout status -f k8-deploy/nodeport_deploy/prod/deployment.yml
     - kubectl get pods,service,deploy,replicaset,ing
   only:
