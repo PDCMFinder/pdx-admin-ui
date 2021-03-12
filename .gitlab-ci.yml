@@ -63,7 +63,7 @@ build_dev_image:
     - docker logout ${CI_REGISTRY}
 
     - echo "Pushing to docker hub"
-    - echo "${DOCKER_HUB_PSWD}" | docker login -u "${DOCKER_HUB_USER}" --password-stdin
+    - echo "${DOCKER_HUB_PWD}" | docker login --username "${DOCKER_HUB_USER}" --password-stdin
     - docker tag "${CI_REGISTRY_IMAGE}":dev "${DOCKER_HUB_USER}"/"${DOCKER_HUB_REPO}":dev
     - docker push "${DOCKER_HUB_USER}"/"${DOCKER_HUB_REPO}":dev  | tee ${MOUNT_POINT}/dockerhub-push-latest.log
     - docker logout
@@ -92,7 +92,7 @@ build_master_image:
     - docker logout ${CI_REGISTRY}
 
     - echo "Pushing to docker hub"
-    - echo "${DOCKER_HUB_PSWD}" | docker login -u "${DOCKER_HUB_USER}" --password-stdin
+    - echo "${DOCKER_HUB_PWD}" | docker login -u "${DOCKER_HUB_USER}" --password-stdin
     - docker tag "${CI_REGISTRY_IMAGE}":latest "${DOCKER_HUB_USER}"/"${DOCKER_HUB_REPO}":latest
     - docker push "${DOCKER_HUB_USER}"/"${DOCKER_HUB_REPO}":latest  | tee ${MOUNT_POINT}/dockerhub-push-latest.log
     - docker logout
